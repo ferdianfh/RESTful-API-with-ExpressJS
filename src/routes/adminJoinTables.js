@@ -3,6 +3,6 @@ const joinTableControllers = require("../controllers/adminJoinTables");
 
 const route = express.Router();
 
-route.get("/join", joinTableControllers.displayJoinTables);
+route.get("/wallet-user-transaction", joinTableControllers.displayJoinTables);
 
 module.exports = route;

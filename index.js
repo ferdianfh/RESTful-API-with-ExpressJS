@@ -23,7 +23,7 @@ app.use(morgan("dev"));
 app.use("/admin/users", userRoutes);
 app.use("/admin/wallet", walletRoutes);
 app.use("/admin/transaction", transactionRoutes);
-app.use("/admin", joinTableRoutes);
+app.use("/admin/join", joinTableRoutes);
 
 // helpers
 app.use(commonHelper.helperMessage);
