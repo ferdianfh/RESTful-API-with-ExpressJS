@@ -46,7 +46,7 @@ Response :
 Request :
 
 - Method : GET
-- Endpoint : `/api/admin/users/details/{id_product}`
+- Endpoint : `/api/admin/users/details/{id_user}`
 - Header :
   - Accept: application/json
 
@@ -75,7 +75,7 @@ Response :
 Request :
 
 - Method : PUT
-- Endpoint : `/api/admin/users/update/{id_product}`
+- Endpoint : `/api/admin/users/update/{id_user}`
 - Header :
   - Content-Type: application/json
   - Accept: application/json
