@@ -31,8 +31,11 @@ CREATE TABLE wallet (
     UNIQUE KEY id_user_unique (id_user),
     CONSTRAINT fk_user_wallet
         FOREIGN KEY (id_user) REFERENCES users (id)
+            ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+INSERT INTO wallet (id, id_user, balance)
+VALUES (120001, 2990001, 120000);
 
 -- Membuat Table transaction
 CREATE TABLE transaction (
@@ -46,4 +49,12 @@ CREATE TABLE transaction (
     PRIMARY KEY (id),
     CONSTRAINT fk_wallet_transaction
         FOREIGN KEY (id_wallet_sender) REFERENCES wallet (id)
+            ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+
+-- Join tables
+SELECT wallet.id_user, users.email, transaction.id_wallet_sender, transaction.id_wallet_receiver, amount_transfer, transaction.notes, transaction.date
+FROM wallet
+JOIN users ON (wallet.id_user = users.id)
+JOIN transaction ON (transaction.id_wallet_sender = wallet.id);

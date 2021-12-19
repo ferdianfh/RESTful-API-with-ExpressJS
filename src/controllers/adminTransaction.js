@@ -1,10 +1,10 @@
-const userModels = require("../models/adminUsers");
+const transactionModels = require("../models/adminTransaction");
 const standardResponse = require("../helpers/responseHandle");
 
-// it will display all users from database
-const displayUsersList = async (req, res, next) => {
+// it will display all transaction from database
+const displayTransactionList = async (req, res, next) => {
   try {
-    const result = await userModels.displayUsersList();
+    const result = await transactionModels.displayTransactionList();
     standardResponse.responses(res, result, 200, "Data requests success!");
   } catch (error) {
     console.log(error.message);
@@ -12,19 +12,19 @@ const displayUsersList = async (req, res, next) => {
   }
 };
 
-// it will input user to database
-const createUser = async (req, res, next) => {
-  const { username, email, first_name, last_name, phone } = req.body;
+// it will input transaction to database
+const createTransaction = async (req, res, next) => {
+  const { id_wallet_sender, id_wallet_receiver, amount_transfer, notes } =
+    req.body;
   const data = {
-    username: username,
-    email: email,
-    first_name: first_name,
-    last_name: last_name,
-    phone: phone,
+    id_wallet_sender: id_wallet_sender,
+    id_wallet_receiver: id_wallet_receiver,
+    amount_transfer: amount_transfer,
+    notes: notes,
   };
 
   try {
-    const result = await userModels.createUser(data);
+    const result = await transactionModels.createTransaction(data);
     standardResponse.responses(
       res,
       result,
@@ -37,21 +37,21 @@ const createUser = async (req, res, next) => {
   }
 };
 
-// it will update specific user info/value
-const updateUserInfo = async (req, res, next) => {
+// it will update specific transaction info/value
+const updateTransactionInfo = async (req, res, next) => {
   const id = req.params.id;
-  const { username, email, first_name, last_name, phone } = req.body;
+  const { id_wallet_sender, id_wallet_receiver, amount_transfer, notes } =
+    req.body;
   const data = {
-    username: username,
-    email: email,
-    first_name: first_name,
-    last_name: last_name,
-    phone: phone,
+    id_wallet_sender: id_wallet_sender,
+    id_wallet_receiver: id_wallet_receiver,
+    amount_transfer: amount_transfer,
+    notes: notes,
     updated_at: new Date(),
   };
 
   try {
-    const result = await userModels.updateUserInfo(data, id);
+    const result = await transactionModels.updateTransactionInfo(data, id);
     standardResponse.responses(
       res,
       result,
@@ -64,12 +64,12 @@ const updateUserInfo = async (req, res, next) => {
   }
 };
 
-// it will delete selected user
-const deleteUser = async (req, res, next) => {
+// it will delete selected transaction
+const deleteTransaction = async (req, res, next) => {
   const id = req.params.id;
 
   try {
-    const result = await userModels.deleteUser(id);
+    const result = await transactionModels.deleteTransaction(id);
     standardResponse.responses(
       res,
       result,
@@ -82,12 +82,12 @@ const deleteUser = async (req, res, next) => {
   }
 };
 
-// it will display detail info from selected user
-const displaySelectedUser = async (req, res, next) => {
+// it will display detail info from selected transaction
+const displaySelectedTransaction = async (req, res, next) => {
   const id = req.params.id;
 
   try {
-    const result = await userModels.displaySelectedUser(id);
+    const result = await transactionModels.displaySelectedTransaction(id);
     const [detailResult] = result;
     standardResponse.responses(
       res,
@@ -101,15 +101,13 @@ const displaySelectedUser = async (req, res, next) => {
   }
 };
 
-// it will search users by name
-const searchUsers = async (req, res, next) => {
+// it will sort transaction by date
+const sortTransaction = async (req, res, next) => {
   try {
-    const search = req.query.username;
     const sort = req.query.sort;
     const order = req.query.order;
 
-    const result = await userModels.searchUsers({
-      search: search,
+    const result = await transactionModels.sortTransaction({
       sort: sort,
       order: order,
     });
@@ -122,10 +120,10 @@ const searchUsers = async (req, res, next) => {
 };
 
 module.exports = {
-  createUser: createUser,
-  displayUsersList: displayUsersList,
-  updateUserInfo: updateUserInfo,
-  deleteUser: deleteUser,
-  displaySelectedUser: displaySelectedUser,
-  searchUsers: searchUsers,
+  createTransaction: createTransaction,
+  displayTransactionList: displayTransactionList,
+  updateTransactionInfo: updateTransactionInfo,
+  deleteTransaction: deleteTransaction,
+  displaySelectedTransaction: displaySelectedTransaction,
+  sortTransaction: sortTransaction,
 };

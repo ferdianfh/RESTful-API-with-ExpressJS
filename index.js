@@ -2,6 +2,8 @@ require("dotenv").config();
 const express = require("express");
 const commonMiddle = require("./src/middleware/custMiddle");
 const userRoutes = require("./src/routes/adminUsers");
+const walletRoutes = require("./src/routes/adminWallet");
+const transactionRoutes = require("./src/routes/adminTransaction");
 const commonHelper = require("./src/helpers/notFoundHandle");
 const errorHelper = require("./src/helpers/errorHandle");
 const morgan = require("morgan");
@@ -18,6 +20,8 @@ app.use(morgan("dev"));
 
 // routes
 app.use("/admin/users", userRoutes);
+app.use("/admin/wallet", walletRoutes);
+app.use("/admin/transaction", transactionRoutes);
 
 // helpers
 app.use(commonHelper.helperMessage);

@@ -1,9 +1,9 @@
 const connection = require("../config/database");
 
-// query to display all users
-const displayUsersList = () => {
+// query to display all transaction
+const displayTransactionList = () => {
   return new Promise((resolve, reject) => {
-    connection.query("SELECT * FROM users", (error, result) => {
+    connection.query("SELECT * FROM transaction", (error, result) => {
       if (!error) {
         resolve(result);
       } else {
@@ -14,9 +14,9 @@ const displayUsersList = () => {
 };
 
 // query to input user to database
-const createUser = (data) => {
+const createTransaction = (data) => {
   return new Promise((resolve, reject) => {
-    connection.query("INSERT INTO users SET ?", data, (error, result) => {
+    connection.query("INSERT INTO transaction SET ?", data, (error, result) => {
       if (!error) {
         resolve(result);
       } else {
@@ -26,11 +26,11 @@ const createUser = (data) => {
   });
 };
 
-// query to update info/value users
-const updateUserInfo = (data, id) => {
+// query to update info/value transaction
+const updateTransactionInfo = (data, id) => {
   return new Promise((resolve, reject) => {
     connection.query(
-      "UPDATE users SET ? WHERE id = ?",
+      "UPDATE transaction SET ? WHERE id = ?",
       [data, id],
       (error, result) => {
         if (!error) {
@@ -44,23 +44,27 @@ const updateUserInfo = (data, id) => {
 };
 
 // query to delete selected user
-const deleteUser = (id) => {
+const deleteTransaction = (id) => {
   return new Promise((resolve, reject) => {
-    connection.query("DELETE FROM users WHERE id = ?", id, (error, result) => {
-      if (!error) {
-        resolve(result);
-      } else {
-        reject(error);
+    connection.query(
+      "DELETE FROM transaction WHERE id = ?",
+      id,
+      (error, result) => {
+        if (!error) {
+          resolve(result);
+        } else {
+          reject(error);
+        }
       }
-    });
+    );
   });
 };
 
 // query to display detail info from selected user
-const displaySelectedUser = (id) => {
+const displaySelectedTransaction = (id) => {
   return new Promise((resolve, reject) => {
     connection.query(
-      "SELECT * FROM users WHERE id = ?",
+      "SELECT * FROM transaction WHERE id = ?",
       id,
       (error, result) => {
         if (!error) {
@@ -74,11 +78,11 @@ const displaySelectedUser = (id) => {
 };
 
 // query to display user by name
-const searchUsers = ({ search, sort, order }) => {
+const sortTransaction = ({ sort, order }) => {
   return new Promise((resolve, reject) => {
     connection.query(
-      `SELECT id, username, email, phone FROM users WHERE username LIKE ? ORDER BY ?? ${order}`,
-      [search, sort],
+      `SELECT id_wallet_sender, id_wallet_receiver, amount_transfer, notes, date FROM transaction ORDER BY ?? ${order}`,
+      sort,
       (error, result) => {
         if (!error) {
           resolve(result);
@@ -91,10 +95,10 @@ const searchUsers = ({ search, sort, order }) => {
 };
 
 module.exports = {
-  createUser,
-  displayUsersList,
-  updateUserInfo,
-  deleteUser,
-  displaySelectedUser,
-  searchUsers,
+  createTransaction,
+  displayTransactionList,
+  updateTransactionInfo,
+  deleteTransaction,
+  displaySelectedTransaction,
+  sortTransaction,
 };
