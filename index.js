@@ -4,6 +4,7 @@ const commonMiddle = require("./src/middleware/custMiddle");
 const userRoutes = require("./src/routes/adminUsers");
 const walletRoutes = require("./src/routes/adminWallet");
 const transactionRoutes = require("./src/routes/adminTransaction");
+const joinTableRoutes = require("./src/routes/adminJoinTables");
 const commonHelper = require("./src/helpers/notFoundHandle");
 const errorHelper = require("./src/helpers/errorHandle");
 const morgan = require("morgan");
@@ -22,6 +23,7 @@ app.use(morgan("dev"));
 app.use("/admin/users", userRoutes);
 app.use("/admin/wallet", walletRoutes);
 app.use("/admin/transaction", transactionRoutes);
+app.use("/admin", joinTableRoutes);
 
 // helpers
 app.use(commonHelper.helperMessage);
