@@ -1,0 +1,32 @@
+{
+  "name": "restful-api-with-expressjs",
+  "version": "1.0.0",
+  "description": "Built RESTful API with Express.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "keywords": [
+    "javascript",
+    "nodejs",
+    "expressjs",
+    "rest",
+    "api",
+    "database",
+    "mysql"
+  ],
+  "author": "Ferdi Ferdiana",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "morgan": "^1.10.0",
+    "mysql2": "^2.3.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
