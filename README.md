@@ -1,6 +1,6 @@
-## API Specification
+# API Specification
 
-### Create User
+## Create User
 
 Request :
 
@@ -37,7 +37,7 @@ Response :
     "createdAt": "timestamp",
     "updatedAt": "datetime"
   },
-  "message": "null"
+  "message": "Data requests success!"
 }
 ```
 
@@ -66,7 +66,7 @@ Response :
     "createdAt": "timestamp",
     "updatedAt": "datetime"
   },
-  "message": "null"
+  "message": "Data request success!"
 }
 ```
 
@@ -107,7 +107,7 @@ Response :
     "createdAt": "timestamp",
     "updatedAt": "datetime"
   },
-  "message": "null"
+  "message": "Data request update success!"
 }
 ```
 
@@ -150,7 +150,8 @@ Response :
       "createdAt": "date",
       "updatedAt": "date"
     }
-  ]
+  ],
+  "message": "Data requests success!"
 }
 ```
 
