@@ -246,4 +246,4 @@ Response :
 
 Here is ERD for Zwallet:
 
-[zwallet_erd]('./img/Zwallet-ERD.png')
+![Zwallet ERD](./img/Zwallet-ERD.png)
