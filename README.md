@@ -241,3 +241,9 @@ Response :
   "message": "Join tables success!"
 }
 ```
+
+## Entity Relational Diagram
+
+Here is ERD for Zwallet:
+
+[zwallet_erd]('./img/Zwallet-ERD.png')
