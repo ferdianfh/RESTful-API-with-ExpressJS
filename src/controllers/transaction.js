@@ -1,4 +1,4 @@
-const transactionModels = require("../models/adminTransaction");
+const transactionModels = require("../models/transaction");
 const standardResponse = require("../helpers/responseHandle");
 
 // it will display all transaction from database
@@ -20,7 +20,7 @@ const createTransaction = async (req, res, next) => {
     id_wallet_sender: id_wallet_sender,
     id_wallet_receiver: id_wallet_receiver,
     amount_transfer: amount_transfer,
-    notes: notes,
+    notes: notes
   };
 
   try {
@@ -47,7 +47,7 @@ const updateTransactionInfo = async (req, res, next) => {
     id_wallet_receiver: id_wallet_receiver,
     amount_transfer: amount_transfer,
     notes: notes,
-    updated_at: new Date(),
+    updated_at: new Date()
   };
 
   try {
@@ -109,7 +109,7 @@ const sortTransaction = async (req, res, next) => {
 
     const result = await transactionModels.sortTransaction({
       sort: sort,
-      order: order,
+      order: order
     });
     standardResponse.responses(res, result, 200, "Data requests success!");
   } catch (error) {
@@ -125,5 +125,5 @@ module.exports = {
   updateTransactionInfo: updateTransactionInfo,
   deleteTransaction: deleteTransaction,
   displaySelectedTransaction: displaySelectedTransaction,
-  sortTransaction: sortTransaction,
+  sortTransaction: sortTransaction
 };

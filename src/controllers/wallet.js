@@ -1,4 +1,4 @@
-const walletModels = require("../models/adminWallet");
+const walletModels = require("../models/wallet");
 const standardResponse = require("../helpers/responseHandle");
 
 // it will display all wallet from database
@@ -17,7 +17,7 @@ const createWallet = async (req, res, next) => {
   const { id_user, balance } = req.body;
   const data = {
     id_user: id_user,
-    balance: balance,
+    balance: balance
   };
 
   try {
@@ -41,7 +41,7 @@ const updateWalletInfo = async (req, res, next) => {
   const data = {
     id_user: id_user,
     balance: balance,
-    updated_at: new Date(),
+    updated_at: new Date()
   };
 
   try {
@@ -100,5 +100,5 @@ module.exports = {
   displayWalletList: displayWalletList,
   updateWalletInfo: updateWalletInfo,
   deleteWallet: deleteWallet,
-  displaySelectedWallet: displaySelectedWallet,
+  displaySelectedWallet: displaySelectedWallet
 };

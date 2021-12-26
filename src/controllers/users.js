@@ -1,4 +1,4 @@
-const userModels = require("../models/adminUsers");
+const userModels = require("../models/users");
 const standardResponse = require("../helpers/responseHandle");
 
 // it will display all users from database
@@ -20,7 +20,7 @@ const createUser = async (req, res, next) => {
     email: email,
     first_name: first_name,
     last_name: last_name,
-    phone: phone,
+    phone: phone
   };
 
   try {
@@ -47,7 +47,7 @@ const updateUserInfo = async (req, res, next) => {
     first_name: first_name,
     last_name: last_name,
     phone: phone,
-    updated_at: new Date(),
+    updated_at: new Date()
   };
 
   try {
@@ -111,7 +111,7 @@ const searchUsers = async (req, res, next) => {
     const result = await userModels.searchUsers({
       search: search,
       sort: sort,
-      order: order,
+      order: order
     });
     standardResponse.responses(res, result, 200, "Data requests success!");
   } catch (error) {
@@ -127,5 +127,5 @@ module.exports = {
   updateUserInfo: updateUserInfo,
   deleteUser: deleteUser,
   displaySelectedUser: displaySelectedUser,
-  searchUsers: searchUsers,
+  searchUsers: searchUsers
 };

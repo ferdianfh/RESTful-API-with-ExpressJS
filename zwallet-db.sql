@@ -6,9 +6,10 @@ USE zwallet;
 
 -- Membuat Table users
 CREATE TABLE users (
-    id INT(10) AUTO_INCREMENT NOT NULL,
+    id VARCHAR(64) NOT NULL,
     username VARCHAR(64) NOT NULL,
     email VARCHAR(64) NOT NULL,
+    password VARCHAR(64) NOT NULL,
     first_name VARCHAR(64) NOT NULL,
     last_name VARCHAR(64) NOT NULL,
     phone VARCHAR(32) NOT NULL,
@@ -17,44 +18,46 @@ CREATE TABLE users (
     PRIMARY KEY (id)
 );
 
-INSERT INTO users (id, username, email, first_name, last_name, phone)
-VALUES (2990001, 'lalaretro', 'lalaretro@gmail.com', 'Lala', 'Retro', '023299292292');
+-- INSERT INTO users (id, username, email, first_name, last_name, phone)
+-- VALUES (2990001, 'lalaretro', 'lalaretro@gmail.com', 'Lala', 'Retro', '023299292292');
 
 -- Membuat Table wallets
 CREATE TABLE wallet (
-    id INT(10) AUTO_INCREMENT NOT NULL,
-    id_user INT(10) NOT NULL,
+    id VARCHAR(64) NOT NULL,
+    user_ID VARCHAR(64) NOT NULL,
+    PIN INT(10) NOT NULL,
+    topup INT(20) NOT NULL DEFAULT 0,
     balance INT(20) NOT NULL DEFAULT 0,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME,
     PRIMARY KEY (id),
-    UNIQUE KEY id_user_unique (id_user),
+    UNIQUE KEY id_user_unique (user_ID),
     CONSTRAINT fk_user_wallet
-        FOREIGN KEY (id_user) REFERENCES users (id)
+        FOREIGN KEY (user_ID) REFERENCES users (id)
             ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-INSERT INTO wallet (id, id_user, balance)
-VALUES (120001, 2990001, 120000);
+-- INSERT INTO wallet (id, id_user, balance)
+-- VALUES (120001, 2990001, 120000);
 
 -- Membuat Table transaction
 CREATE TABLE transaction (
-    id INT(10) AUTO_INCREMENT NOT NULL,
-    id_wallet_sender INT(10) NOT NULL,
-    id_wallet_receiver INT(10) NOT NULL,
-    amount_transfer INT(15) NOT NULL,
+    id VARCHAR(64) NOT NULL,
+    wallet_ID VARCHAR(64) NOT NULL,
+    phone_receiver VARCHAR(32) NOT NULL,
+    amount_transfer INT(20) NOT NULL DEFAULT 0,
     notes TEXT,
     date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME,
     PRIMARY KEY (id),
     CONSTRAINT fk_wallet_transaction
-        FOREIGN KEY (id_wallet_sender) REFERENCES wallet (id)
-            ON DELETE CASCADE ON UPDATE CASCADE
+        FOREIGN KEY (wallet_ID) REFERENCES wallet (id)
+            ON DELETE CASCADE ON UPDATE RESTRICT
 );
 
 
 -- Join tables
-SELECT wallet.id_user, users.email, transaction.id_wallet_sender, transaction.id_wallet_receiver, amount_transfer, transaction.notes, transaction.date
+SELECT wallet.id_user, users.email, transaction.wallet_ID, transaction.phone_receiver, amount_transfer, transaction.notes, transaction.date
 FROM wallet
 JOIN users ON (wallet.id_user = users.id)
-JOIN transaction ON (transaction.id_wallet_sender = wallet.id);
+JOIN transaction ON (transaction.wallet_ID = wallet.id);
