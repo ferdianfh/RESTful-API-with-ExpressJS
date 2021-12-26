@@ -1,5 +1,5 @@
-const walletModel = require("../models/wallet");
-const standardResponse = require("../helpers/responseHandle");
+const walletModel = require("../model/wallet");
+const standardResponse = require("../helper/responseHandle");
 
 const createWallet = async (req, res, next) => {
   const { id_user, balance } = req.body;

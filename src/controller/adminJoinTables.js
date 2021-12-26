@@ -1,5 +1,5 @@
-const joinTablesModels = require("../models/adminJoinTables");
-const standardResponse = require("../helpers/responseHandle");
+const joinTablesModels = require("../model/adminJoinTables");
+const standardResponse = require("../helper/responseHandle");
 
 const displayJoinTables = async (req, res, next) => {
   try {

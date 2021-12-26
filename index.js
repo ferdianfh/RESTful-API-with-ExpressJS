@@ -5,8 +5,8 @@ const userRoutes = require("./src/routes/users");
 const walletRoutes = require("./src/routes/wallet");
 const transactionRoutes = require("./src/routes/transaction");
 const joinTableRoutes = require("./src/routes/adminJoinTables");
-const commonHelper = require("./src/helpers/notFoundHandle");
-const errorHelper = require("./src/helpers/errorHandle");
+const commonHelper = require("./src/helper/notFoundHandle");
+const errorHelper = require("./src/helper/errorHandle");
 const morgan = require("morgan");
 const cors = require("cors");
 

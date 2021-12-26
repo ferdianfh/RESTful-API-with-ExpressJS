@@ -1,18 +1,17 @@
-const userModel = require("../models/users");
-const standardResponse = require("../helpers/responseHandle");
+const transactionModel = require("../model/transaction");
+const standardResponse = require("../helper/responseHandle");
 
-const createAccount = async (req, res, next) => {
-  const { username, email, password, first_name, last_name, phone } = req.body;
+const createTransaction = async (req, res, next) => {
+  const { id_wallet_sender, id_wallet_receiver, amount_transfer, notes } =
+    req.body;
   const data = {
-    username: username,
-    email: email,
-    password: password,
-    first_name: first_name,
-    last_name: last_name,
-    phone: phone
+    id_wallet_sender: id_wallet_sender,
+    id_wallet_receiver: id_wallet_receiver,
+    amount_transfer: amount_transfer,
+    notes: notes
   };
   try {
-    const result = await userModel.createAccount(data);
+    const result = await transactionModel.createTransaction(data);
     standardResponse.responses(
       res,
       result,
@@ -25,9 +24,9 @@ const createAccount = async (req, res, next) => {
   }
 };
 
-const listAccounts = async (req, res, next) => {
+const listTransaction = async (req, res, next) => {
   try {
-    const result = await userModel.listAccounts();
+    const result = await transactionModel.listTransaction();
     standardResponse.responses(res, result, 200, "Data requests success!");
   } catch (error) {
     console.log(error.message);
@@ -35,19 +34,19 @@ const listAccounts = async (req, res, next) => {
   }
 };
 
-const updateAccount = async (req, res, next) => {
+const updateTransaction = async (req, res, next) => {
   const id = req.params.id;
-  const { username, email, first_name, last_name, phone } = req.body;
+  const { id_wallet_sender, id_wallet_receiver, amount_transfer, notes } =
+    req.body;
   const data = {
-    username: username,
-    email: email,
-    first_name: first_name,
-    last_name: last_name,
-    phone: phone,
+    id_wallet_sender: id_wallet_sender,
+    id_wallet_receiver: id_wallet_receiver,
+    amount_transfer: amount_transfer,
+    notes: notes,
     updated_at: new Date()
   };
   try {
-    const result = await userModel.updateAccount(data, id);
+    const result = await transactionModel.updateTransaction(data, id);
     standardResponse.responses(
       res,
       result,
@@ -59,11 +58,10 @@ const updateAccount = async (req, res, next) => {
     next({ status: 500, message: "Internal Server Error!" });
   }
 };
-
-const deleteAccount = async (req, res, next) => {
+const deleteTransaction = async (req, res, next) => {
   const id = req.params.id;
   try {
-    const result = await userModel.deleteAccount(id);
+    const result = await transactionModel.deleteTransaction(id);
     standardResponse.responses(
       res,
       result,
@@ -76,10 +74,10 @@ const deleteAccount = async (req, res, next) => {
   }
 };
 
-const detailsAccount = async (req, res, next) => {
+const detailsTransaction = async (req, res, next) => {
   const id = req.params.id;
   try {
-    const result = await userModel.detailsAccount(id);
+    const result = await transactionModel.detailsTransaction(id);
     const [detailResult] = result;
     standardResponse.responses(
       res,
@@ -93,14 +91,11 @@ const detailsAccount = async (req, res, next) => {
   }
 };
 
-const searchUsers = async (req, res, next) => {
+const sortTransaction = async (req, res, next) => {
   try {
-    const search = req.query.username;
     const sort = req.query.sort;
     const order = req.query.order;
-
-    const result = await userModel.searchUsers({
-      search: search,
+    const result = await transactionModel.sortTransaction({
       sort: sort,
       order: order
     });
@@ -112,10 +107,10 @@ const searchUsers = async (req, res, next) => {
 };
 
 module.exports = {
-  createAccount,
-  listAccounts,
-  updateAccount,
-  deleteAccount,
-  detailsAccount,
-  searchUsers
+  createTransaction,
+  listTransaction,
+  updateTransaction,
+  deleteTransaction,
+  detailsTransaction,
+  sortTransaction
 };

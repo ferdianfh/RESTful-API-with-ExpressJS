@@ -1,5 +1,5 @@
 const express = require("express");
-const joinTableControllers = require("../controllers/adminJoinTables");
+const joinTableControllers = require("../controller/adminJoinTables");
 
 const route = express.Router();
 

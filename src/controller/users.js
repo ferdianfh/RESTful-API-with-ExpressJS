@@ -1,17 +1,18 @@
-const transactionModel = require("../models/transaction");
-const standardResponse = require("../helpers/responseHandle");
+const userModel = require("../model/users");
+const standardResponse = require("../helper/responseHandle");
 
-const createTransaction = async (req, res, next) => {
-  const { id_wallet_sender, id_wallet_receiver, amount_transfer, notes } =
-    req.body;
+const createAccount = async (req, res, next) => {
+  const { username, email, password, first_name, last_name, phone } = req.body;
   const data = {
-    id_wallet_sender: id_wallet_sender,
-    id_wallet_receiver: id_wallet_receiver,
-    amount_transfer: amount_transfer,
-    notes: notes
+    username: username,
+    email: email,
+    password: password,
+    first_name: first_name,
+    last_name: last_name,
+    phone: phone
   };
   try {
-    const result = await transactionModel.createTransaction(data);
+    const result = await userModel.createAccount(data);
     standardResponse.responses(
       res,
       result,
@@ -24,9 +25,9 @@ const createTransaction = async (req, res, next) => {
   }
 };
 
-const listTransaction = async (req, res, next) => {
+const listAccounts = async (req, res, next) => {
   try {
-    const result = await transactionModel.listTransaction();
+    const result = await userModel.listAccounts();
     standardResponse.responses(res, result, 200, "Data requests success!");
   } catch (error) {
     console.log(error.message);
@@ -34,19 +35,19 @@ const listTransaction = async (req, res, next) => {
   }
 };
 
-const updateTransaction = async (req, res, next) => {
+const updateAccount = async (req, res, next) => {
   const id = req.params.id;
-  const { id_wallet_sender, id_wallet_receiver, amount_transfer, notes } =
-    req.body;
+  const { username, email, first_name, last_name, phone } = req.body;
   const data = {
-    id_wallet_sender: id_wallet_sender,
-    id_wallet_receiver: id_wallet_receiver,
-    amount_transfer: amount_transfer,
-    notes: notes,
+    username: username,
+    email: email,
+    first_name: first_name,
+    last_name: last_name,
+    phone: phone,
     updated_at: new Date()
   };
   try {
-    const result = await transactionModel.updateTransaction(data, id);
+    const result = await userModel.updateAccount(data, id);
     standardResponse.responses(
       res,
       result,
@@ -58,10 +59,11 @@ const updateTransaction = async (req, res, next) => {
     next({ status: 500, message: "Internal Server Error!" });
   }
 };
-const deleteTransaction = async (req, res, next) => {
+
+const deleteAccount = async (req, res, next) => {
   const id = req.params.id;
   try {
-    const result = await transactionModel.deleteTransaction(id);
+    const result = await userModel.deleteAccount(id);
     standardResponse.responses(
       res,
       result,
@@ -74,10 +76,10 @@ const deleteTransaction = async (req, res, next) => {
   }
 };
 
-const detailsTransaction = async (req, res, next) => {
+const detailsAccount = async (req, res, next) => {
   const id = req.params.id;
   try {
-    const result = await transactionModel.detailsTransaction(id);
+    const result = await userModel.detailsAccount(id);
     const [detailResult] = result;
     standardResponse.responses(
       res,
@@ -91,11 +93,14 @@ const detailsTransaction = async (req, res, next) => {
   }
 };
 
-const sortTransaction = async (req, res, next) => {
+const searchUsers = async (req, res, next) => {
   try {
+    const search = req.query.username;
     const sort = req.query.sort;
     const order = req.query.order;
-    const result = await transactionModel.sortTransaction({
+
+    const result = await userModel.searchUsers({
+      search: search,
       sort: sort,
       order: order
     });
@@ -107,10 +112,10 @@ const sortTransaction = async (req, res, next) => {
 };
 
 module.exports = {
-  createTransaction,
-  listTransaction,
-  updateTransaction,
-  deleteTransaction,
-  detailsTransaction,
-  sortTransaction
+  createAccount,
+  listAccounts,
+  updateAccount,
+  deleteAccount,
+  detailsAccount,
+  searchUsers
 };
