@@ -10,13 +10,22 @@ CREATE TABLE users (
     username VARCHAR(64) NOT NULL,
     email VARCHAR(64) NOT NULL,
     password VARCHAR(64) NOT NULL,
-    first_name VARCHAR(64) NOT NULL,
-    last_name VARCHAR(64) NOT NULL,
-    phone VARCHAR(32) NOT NULL,
+    first_name VARCHAR(64),
+    last_name VARCHAR(64),
+    phone VARCHAR(32),
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME,
     PRIMARY KEY (id)
 );
+
+ALTER TABLE users
+MODIFY first_name VARCHAR(64);
+
+ALTER TABLE users
+MODIFY last_name VARCHAR(64);
+
+ALTER TABLE users
+MODIFY phone VARCHAR(32);
 
 -- INSERT INTO users (id, username, email, first_name, last_name, phone)
 -- VALUES (2990001, 'lalaretro', 'lalaretro@gmail.com', 'Lala', 'Retro', '023299292292');
