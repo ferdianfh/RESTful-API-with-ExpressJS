@@ -2,26 +2,6 @@
 const walletModel = require("../model/wallet");
 const standardResponse = require("../helper/responseHandle");
 
-const createWallet = async (req, res, next) => {
-  const { id_user, balance } = req.body;
-  const data = {
-    id_user: id_user,
-    balance: balance
-  };
-  try {
-    const result = await walletModel.createWallet(data);
-    standardResponse.responses(
-      res,
-      result,
-      200,
-      "Data requests input success!"
-    );
-  } catch (error) {
-    console.log(error.message);
-    next({ status: 500, message: "Internal Server Error!" });
-  }
-};
-
 const listWallets = async (req, res, next) => {
   try {
     const sort = req.query.sort || "created_at";
@@ -105,7 +85,6 @@ const detailsWallet = async (req, res, next) => {
 };
 
 module.exports = {
-  createWallet,
   listWallets,
   updateWallet,
   deleteWallet,

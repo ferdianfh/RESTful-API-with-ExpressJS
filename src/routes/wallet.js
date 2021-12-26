@@ -4,7 +4,6 @@ const walletController = require("../controller/wallet");
 const router = express.Router();
 
 router
-  .post("/", walletController.createWallet)
   .get("/", walletController.listWallets)
   .put("/:id", walletController.updateWallet)
   .delete("/:id", walletController.deleteWallet)

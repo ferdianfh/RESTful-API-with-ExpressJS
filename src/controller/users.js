@@ -1,5 +1,8 @@
 /* eslint-disable camelcase */
+const bcrypt = require("bcrypt");
+const { v4: uuidv4 } = require("uuid");
 const userModel = require("../model/users");
+const walletModel = require("../model/wallet");
 const standardResponse = require("../helper/responseHandle");
 
 const createAccount = async (req, res, next) => {
@@ -124,11 +127,69 @@ const searchUsers = async (req, res, next) => {
   }
 };
 
+const signUp = async (req, res, next) => {
+  try {
+    const { username, email, password } = req.body;
+    const userId = uuidv4();
+    const user = await userModel.searchAccount(email);
+    if (user.length > 0) {
+      return next({ status: 403, message: "This account is already exist!" });
+    }
+    const saltRounds = 10;
+    const hashPassword = await bcrypt.hash(password, saltRounds);
+    const account = {
+      id: userId,
+      username,
+      email,
+      password: hashPassword
+    };
+    const wallet = {
+      id: uuidv4(),
+      user_ID: userId
+    };
+    const result = await userModel.createNewAccount(account);
+    const createWallet = await walletModel.createWallet(wallet);
+    console.log(result);
+    console.log(createWallet);
+    standardResponse.responses(res, account, 200, "Registration Success!");
+  } catch (error) {
+    console.log(error.message);
+    next({ status: 500, message: "Internal Server Error!" });
+  }
+};
+
+const login = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+    const [account] = await userModel.searchAccount(email);
+    if (!account) {
+      return next({
+        status: 403,
+        message: "Wrong email or password. Please check again!"
+      });
+    }
+    const checkPassword = await bcrypt.compare(password, account.password);
+    if (checkPassword) {
+      standardResponse.responses(res, null, 200, "Login success!");
+    } else {
+      return next({
+        status: 403,
+        message: "Wrong email or password. Please check again!"
+      });
+    }
+  } catch (error) {
+    console.log(error.message);
+    next({ status: 500, message: "Internal Server Error!" });
+  }
+};
+
 module.exports = {
   createAccount,
   listAccounts,
   updateAccount,
   deleteAccount,
   detailsAccount,
-  searchUsers
+  searchUsers,
+  signUp,
+  login
 };

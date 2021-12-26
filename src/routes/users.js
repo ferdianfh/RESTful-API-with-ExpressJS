@@ -9,6 +9,8 @@ router
   .put("/:id", userController.updateAccount)
   .delete("/:id", userController.deleteAccount)
   .get("/details/:id", userController.detailsAccount)
-  .get("/search", userController.searchUsers);
+  .get("/search", userController.searchUsers)
+  .post("/registration", userController.signUp)
+  .post("/login", userController.login);
 
 module.exports = router;

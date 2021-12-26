@@ -1,8 +1,8 @@
 const connection = require("../config/database");
 
-const createWallet = (data) => {
+const createWallet = (wallet) => {
   return new Promise((resolve, reject) => {
-    connection.query("INSERT INTO wallet SET ?", data, (error, result) => {
+    connection.query("INSERT INTO wallet SET ?", wallet, (error, result) => {
       if (!error) {
         resolve(result);
       } else {

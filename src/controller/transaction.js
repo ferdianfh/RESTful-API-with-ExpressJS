@@ -74,6 +74,7 @@ const updateTransaction = async (req, res, next) => {
     next({ status: 500, message: "Internal Server Error!" });
   }
 };
+
 const deleteTransaction = async (req, res, next) => {
   const id = req.params.id;
   try {
