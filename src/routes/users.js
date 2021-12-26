@@ -1,14 +1,14 @@
 const express = require("express");
-const userControllers = require("../controllers/users");
+const userController = require("../controllers/users");
 
 const router = express.Router();
 
 router
-  .post("/", userControllers.createUser)
-  .get("/", userControllers.displayUsersList)
-  .put("/:id", userControllers.updateUserInfo)
-  .delete("/:id", userControllers.deleteUser)
-  .get("/details/:id", userControllers.displaySelectedUser)
-  .get("/search", userControllers.searchUsers);
+  .post("/", userController.createAccount)
+  .get("/", userController.listAccounts)
+  .put("/:id", userController.updateAccount)
+  .delete("/:id", userController.deleteAccount)
+  .get("/details/:id", userController.detailsAccount)
+  .get("/search", userController.searchUsers);
 
 module.exports = router;

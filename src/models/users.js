@@ -1,20 +1,6 @@
 const connection = require("../config/database");
 
-// query to display all users
-const displayUsersList = () => {
-  return new Promise((resolve, reject) => {
-    connection.query("SELECT * FROM users", (error, result) => {
-      if (!error) {
-        resolve(result);
-      } else {
-        reject(error);
-      }
-    });
-  });
-};
-
-// query to input user to database
-const createUser = (data) => {
+const createAccount = (data) => {
   return new Promise((resolve, reject) => {
     connection.query("INSERT INTO users SET ?", data, (error, result) => {
       if (!error) {
@@ -26,8 +12,19 @@ const createUser = (data) => {
   });
 };
 
-// query to update info/value users
-const updateUserInfo = (data, id) => {
+const listAccounts = () => {
+  return new Promise((resolve, reject) => {
+    connection.query("SELECT * FROM users", (error, result) => {
+      if (!error) {
+        resolve(result);
+      } else {
+        reject(error);
+      }
+    });
+  });
+};
+
+const updateAccount = (data, id) => {
   return new Promise((resolve, reject) => {
     connection.query(
       "UPDATE users SET ? WHERE id = ?",
@@ -43,8 +40,7 @@ const updateUserInfo = (data, id) => {
   });
 };
 
-// query to delete selected user
-const deleteUser = (id) => {
+const deleteAccount = (id) => {
   return new Promise((resolve, reject) => {
     connection.query("DELETE FROM users WHERE id = ?", id, (error, result) => {
       if (!error) {
@@ -56,8 +52,7 @@ const deleteUser = (id) => {
   });
 };
 
-// query to display detail info from selected user
-const displaySelectedUser = (id) => {
+const detailsAccount = (id) => {
   return new Promise((resolve, reject) => {
     connection.query(
       "SELECT * FROM users WHERE id = ?",
@@ -73,7 +68,6 @@ const displaySelectedUser = (id) => {
   });
 };
 
-// query to display user by name
 const searchUsers = ({ search, sort, order }) => {
   return new Promise((resolve, reject) => {
     connection.query(
@@ -91,10 +85,10 @@ const searchUsers = ({ search, sort, order }) => {
 };
 
 module.exports = {
-  createUser,
-  displayUsersList,
-  updateUserInfo,
-  deleteUser,
-  displaySelectedUser,
-  searchUsers,
+  createAccount,
+  listAccounts,
+  updateAccount,
+  deleteAccount,
+  detailsAccount,
+  searchUsers
 };

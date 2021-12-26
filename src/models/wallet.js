@@ -1,19 +1,5 @@
 const connection = require("../config/database");
 
-// query to display all wallet
-const displayWalletList = () => {
-  return new Promise((resolve, reject) => {
-    connection.query("SELECT * FROM wallet", (error, result) => {
-      if (!error) {
-        resolve(result);
-      } else {
-        reject(error);
-      }
-    });
-  });
-};
-
-// query to input wallet to database
 const createWallet = (data) => {
   return new Promise((resolve, reject) => {
     connection.query("INSERT INTO wallet SET ?", data, (error, result) => {
@@ -26,8 +12,19 @@ const createWallet = (data) => {
   });
 };
 
-// query to update info/value wallet
-const updateWalletInfo = (data, id) => {
+const listWallets = () => {
+  return new Promise((resolve, reject) => {
+    connection.query("SELECT * FROM wallet", (error, result) => {
+      if (!error) {
+        resolve(result);
+      } else {
+        reject(error);
+      }
+    });
+  });
+};
+
+const updateWallet = (data, id) => {
   return new Promise((resolve, reject) => {
     connection.query(
       "UPDATE wallet SET ? WHERE id = ?",
@@ -43,7 +40,6 @@ const updateWalletInfo = (data, id) => {
   });
 };
 
-// query to delete selected wallet
 const deleteWallet = (id) => {
   return new Promise((resolve, reject) => {
     connection.query("DELETE FROM wallet WHERE id = ?", id, (error, result) => {
@@ -56,8 +52,7 @@ const deleteWallet = (id) => {
   });
 };
 
-// query to display detail info from selected wallet
-const displaySelectedWallet = (id) => {
+const detailsWallet = (id) => {
   return new Promise((resolve, reject) => {
     connection.query(
       "SELECT * FROM wallet WHERE id = ?",
@@ -75,8 +70,8 @@ const displaySelectedWallet = (id) => {
 
 module.exports = {
   createWallet,
-  displayWalletList,
-  updateWalletInfo,
+  listWallets,
+  updateWallet,
   deleteWallet,
-  displaySelectedWallet,
+  detailsWallet
 };

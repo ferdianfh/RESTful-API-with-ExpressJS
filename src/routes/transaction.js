@@ -5,10 +5,10 @@ const router = express.Router();
 
 router
   .post("/", transactionController.createTransaction)
-  .get("/", transactionController.displayTransactionList)
-  .put("/:id", transactionController.updateTransactionInfo)
+  .get("/", transactionController.listTransaction)
+  .put("/:id", transactionController.updateTransaction)
   .delete("/:id", transactionController.deleteTransaction)
-  .get("/details/:id", transactionController.displaySelectedTransaction)
+  .get("/details/:id", transactionController.detailsTransaction)
   .get("/", transactionController.sortTransaction);
 
 module.exports = router;

@@ -1,13 +1,13 @@
 const express = require("express");
-const walletControllers = require("../controllers/wallet");
+const walletController = require("../controllers/wallet");
 
 const router = express.Router();
 
 router
-  .post("/", walletControllers.createWallet)
-  .get("/", walletControllers.displayWalletList)
-  .put("/:id", walletControllers.updateWalletInfo)
-  .delete("/:id", walletControllers.deleteWallet)
-  .get("/details/:id", walletControllers.displaySelectedWallet);
+  .post("/", walletController.createWallet)
+  .get("/", walletController.listWallets)
+  .put("/:id", walletController.updateWallet)
+  .delete("/:id", walletController.deleteWallet)
+  .get("/details/:id", walletController.detailsWallet);
 
 module.exports = router;

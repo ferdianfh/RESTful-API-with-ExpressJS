@@ -1,30 +1,18 @@
-const userModels = require("../models/users");
+const userModel = require("../models/users");
 const standardResponse = require("../helpers/responseHandle");
 
-// it will display all users from database
-const displayUsersList = async (req, res, next) => {
-  try {
-    const result = await userModels.displayUsersList();
-    standardResponse.responses(res, result, 200, "Data requests success!");
-  } catch (error) {
-    console.log(error.message);
-    next({ status: 500, message: "Internal Server Error!" });
-  }
-};
-
-// it will input user to database
-const createUser = async (req, res, next) => {
-  const { username, email, first_name, last_name, phone } = req.body;
+const createAccount = async (req, res, next) => {
+  const { username, email, password, first_name, last_name, phone } = req.body;
   const data = {
     username: username,
     email: email,
+    password: password,
     first_name: first_name,
     last_name: last_name,
     phone: phone
   };
-
   try {
-    const result = await userModels.createUser(data);
+    const result = await userModel.createAccount(data);
     standardResponse.responses(
       res,
       result,
@@ -37,8 +25,17 @@ const createUser = async (req, res, next) => {
   }
 };
 
-// it will update specific user info/value
-const updateUserInfo = async (req, res, next) => {
+const listAccounts = async (req, res, next) => {
+  try {
+    const result = await userModel.listAccounts();
+    standardResponse.responses(res, result, 200, "Data requests success!");
+  } catch (error) {
+    console.log(error.message);
+    next({ status: 500, message: "Internal Server Error!" });
+  }
+};
+
+const updateAccount = async (req, res, next) => {
   const id = req.params.id;
   const { username, email, first_name, last_name, phone } = req.body;
   const data = {
@@ -49,9 +46,8 @@ const updateUserInfo = async (req, res, next) => {
     phone: phone,
     updated_at: new Date()
   };
-
   try {
-    const result = await userModels.updateUserInfo(data, id);
+    const result = await userModel.updateAccount(data, id);
     standardResponse.responses(
       res,
       result,
@@ -64,12 +60,10 @@ const updateUserInfo = async (req, res, next) => {
   }
 };
 
-// it will delete selected user
-const deleteUser = async (req, res, next) => {
+const deleteAccount = async (req, res, next) => {
   const id = req.params.id;
-
   try {
-    const result = await userModels.deleteUser(id);
+    const result = await userModel.deleteAccount(id);
     standardResponse.responses(
       res,
       result,
@@ -82,12 +76,10 @@ const deleteUser = async (req, res, next) => {
   }
 };
 
-// it will display detail info from selected user
-const displaySelectedUser = async (req, res, next) => {
+const detailsAccount = async (req, res, next) => {
   const id = req.params.id;
-
   try {
-    const result = await userModels.displaySelectedUser(id);
+    const result = await userModel.detailsAccount(id);
     const [detailResult] = result;
     standardResponse.responses(
       res,
@@ -101,31 +93,29 @@ const displaySelectedUser = async (req, res, next) => {
   }
 };
 
-// it will search users by name
 const searchUsers = async (req, res, next) => {
   try {
     const search = req.query.username;
     const sort = req.query.sort;
     const order = req.query.order;
 
-    const result = await userModels.searchUsers({
+    const result = await userModel.searchUsers({
       search: search,
       sort: sort,
       order: order
     });
     standardResponse.responses(res, result, 200, "Data requests success!");
   } catch (error) {
-    // it will show error from internal such as bad query or typo
     console.log(error.message);
     next({ status: 500, message: "Internal Server Error!" });
   }
 };
 
 module.exports = {
-  createUser: createUser,
-  displayUsersList: displayUsersList,
-  updateUserInfo: updateUserInfo,
-  deleteUser: deleteUser,
-  displaySelectedUser: displaySelectedUser,
-  searchUsers: searchUsers
+  createAccount,
+  listAccounts,
+  updateAccount,
+  deleteAccount,
+  detailsAccount,
+  searchUsers
 };
