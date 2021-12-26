@@ -12,15 +12,19 @@ const createAccount = (data) => {
   });
 };
 
-const listAccounts = () => {
+const listAccounts = ({ sort, order, limit, offset }) => {
   return new Promise((resolve, reject) => {
-    connection.query("SELECT * FROM users", (error, result) => {
-      if (!error) {
-        resolve(result);
-      } else {
-        reject(error);
+    connection.query(
+      `SELECT * FROM users ORDER BY ?? ${order} LIMIT ? OFFSET ?`,
+      [sort, limit, offset],
+      (error, result) => {
+        if (!error) {
+          resolve(result);
+        } else {
+          reject(error);
+        }
       }
-    });
+    );
   });
 };
 
@@ -84,11 +88,24 @@ const searchUsers = ({ search, sort, order }) => {
   });
 };
 
+const calculateAccount = () => {
+  return new Promise((resolve, reject) => {
+    connection.query("SELECT COUNT(*) AS total FROM users", (error, result) => {
+      if (!error) {
+        resolve(result);
+      } else {
+        reject(error);
+      }
+    });
+  });
+};
+
 module.exports = {
   createAccount,
   listAccounts,
   updateAccount,
   deleteAccount,
   detailsAccount,
-  searchUsers
+  searchUsers,
+  calculateAccount
 };

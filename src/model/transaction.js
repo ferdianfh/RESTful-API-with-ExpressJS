@@ -12,15 +12,19 @@ const createTransaction = (data) => {
   });
 };
 
-const listTransaction = () => {
+const listTransaction = ({ sort, order, limit, offset }) => {
   return new Promise((resolve, reject) => {
-    connection.query("SELECT * FROM transaction", (error, result) => {
-      if (!error) {
-        resolve(result);
-      } else {
-        reject(error);
+    connection.query(
+      `SELECT * FROM transaction ORDER BY ?? ${order} LIMIT ? OFFSET ?`,
+      [sort, limit, offset],
+      (error, result) => {
+        if (!error) {
+          resolve(result);
+        } else {
+          reject(error);
+        }
       }
-    });
+    );
   });
 };
 
@@ -88,11 +92,27 @@ const sortTransaction = ({ sort, order }) => {
   });
 };
 
+const calculateTransaction = () => {
+  return new Promise((resolve, reject) => {
+    connection.query(
+      "SELECT COUNT(*) AS total FROM transaction",
+      (error, result) => {
+        if (!error) {
+          resolve(result);
+        } else {
+          reject(error);
+        }
+      }
+    );
+  });
+};
+
 module.exports = {
   createTransaction,
   listTransaction,
   updateTransaction,
   deleteTransaction,
   detailsTransaction,
-  sortTransaction
+  sortTransaction,
+  calculateTransaction
 };

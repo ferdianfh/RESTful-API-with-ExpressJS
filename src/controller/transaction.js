@@ -26,8 +26,25 @@ const createTransaction = async (req, res, next) => {
 
 const listTransaction = async (req, res, next) => {
   try {
-    const result = await transactionModel.listTransaction();
-    standardResponse.responses(res, result, 200, "Data requests success!");
+    const sort = req.query.sort || "created_at";
+    const order = req.query.order || "desc";
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 3;
+    const offset = (page - 1) * limit;
+    const result = await transactionModel.listTransaction({
+      sort,
+      order,
+      limit,
+      offset
+    });
+    const calcResult = await transactionModel.calculateTransaction();
+    const { total } = calcResult[0];
+    standardResponse.responses(res, result, 200, "Data requests success!", {
+      currentPage: page,
+      limit: limit,
+      totalTransaction: total,
+      totalPage: Math.ceil(total / limit)
+    });
   } catch (error) {
     console.log(error.message);
     next({ status: 500, message: "Internal Server Error!" });

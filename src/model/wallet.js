@@ -12,15 +12,19 @@ const createWallet = (data) => {
   });
 };
 
-const listWallets = () => {
+const listWallets = ({ sort, order, limit, offset }) => {
   return new Promise((resolve, reject) => {
-    connection.query("SELECT * FROM wallet", (error, result) => {
-      if (!error) {
-        resolve(result);
-      } else {
-        reject(error);
+    connection.query(
+      `SELECT * FROM wallet ORDER BY ?? ${order} LIMIT ? OFFSET ?`,
+      [sort, limit, offset],
+      (error, result) => {
+        if (!error) {
+          resolve(result);
+        } else {
+          reject(error);
+        }
       }
-    });
+    );
   });
 };
 
@@ -68,10 +72,26 @@ const detailsWallet = (id) => {
   });
 };
 
+const calculateWallet = () => {
+  return new Promise((resolve, reject) => {
+    connection.query(
+      "SELECT COUNT(*) AS total FROM wallet",
+      (error, result) => {
+        if (!error) {
+          resolve(result);
+        } else {
+          reject(error);
+        }
+      }
+    );
+  });
+};
+
 module.exports = {
   createWallet,
   listWallets,
   updateWallet,
   deleteWallet,
-  detailsWallet
+  detailsWallet,
+  calculateWallet
 };
