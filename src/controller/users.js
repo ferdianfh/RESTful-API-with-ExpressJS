@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 const userModel = require("../model/users");
 const standardResponse = require("../helper/responseHandle");
 

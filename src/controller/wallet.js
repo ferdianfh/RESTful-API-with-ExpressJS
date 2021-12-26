@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 const walletModel = require("../model/wallet");
 const standardResponse = require("../helper/responseHandle");
 

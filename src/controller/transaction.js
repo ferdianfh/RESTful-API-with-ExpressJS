@@ -1,12 +1,12 @@
+/* eslint-disable camelcase */
 const transactionModel = require("../model/transaction");
 const standardResponse = require("../helper/responseHandle");
 
 const createTransaction = async (req, res, next) => {
-  const { id_wallet_sender, id_wallet_receiver, amount_transfer, notes } =
-    req.body;
+  const { wallet_ID, phone_receiver, amount_transfer, notes } = req.body;
   const data = {
-    id_wallet_sender: id_wallet_sender,
-    id_wallet_receiver: id_wallet_receiver,
+    wallet_ID: wallet_ID,
+    phone_receiver: phone_receiver,
     amount_transfer: amount_transfer,
     notes: notes
   };
@@ -36,11 +36,10 @@ const listTransaction = async (req, res, next) => {
 
 const updateTransaction = async (req, res, next) => {
   const id = req.params.id;
-  const { id_wallet_sender, id_wallet_receiver, amount_transfer, notes } =
-    req.body;
+  const { wallet_ID, phone_receiver, amount_transfer, notes } = req.body;
   const data = {
-    id_wallet_sender: id_wallet_sender,
-    id_wallet_receiver: id_wallet_receiver,
+    wallet_ID: wallet_ID,
+    phone_receiver: phone_receiver,
     amount_transfer: amount_transfer,
     notes: notes,
     updated_at: new Date()
