@@ -53,10 +53,11 @@ const listAccounts = async (req, res, next) => {
 
 const updateAccount = async (req, res, next) => {
   const id = req.params.id;
-  const { username, email, first_name, last_name, phone } = req.body;
+  const { username, email, password, first_name, last_name, phone } = req.body;
   const data = {
     username: username,
     email: email,
+    password: password,
     first_name: first_name,
     last_name: last_name,
     phone: phone,
@@ -80,12 +81,8 @@ const deleteAccount = async (req, res, next) => {
   const id = req.params.id;
   try {
     const result = await userModel.deleteAccount(id);
-    standardResponse.responses(
-      res,
-      result,
-      200,
-      "Data requests delete success!"
-    );
+    console.log(result);
+    standardResponse.responses(res, null, 200, "Account Deleted!");
   } catch (error) {
     console.log(error.message);
     next({ status: 500, message: "Internal Server Error!" });
@@ -151,7 +148,7 @@ const signUp = async (req, res, next) => {
     const createWallet = await walletModel.createWallet(wallet);
     console.log(result);
     console.log(createWallet);
-    standardResponse.responses(res, account, 200, "Registration Success!");
+    standardResponse.responses(res, account, 201, "Registration Success!");
   } catch (error) {
     console.log(error.message);
     next({ status: 500, message: "Internal Server Error!" });
@@ -165,18 +162,46 @@ const login = async (req, res, next) => {
     if (!account) {
       return next({
         status: 403,
-        message: "Wrong email or password. Please check again!"
+        message:
+          "There's something wrong with login. Please check your email or password!"
       });
     }
     const checkPassword = await bcrypt.compare(password, account.password);
     if (checkPassword) {
-      standardResponse.responses(res, null, 200, "Login success!");
+      standardResponse.responses(res, account, 200, "Login success!");
     } else {
       return next({
         status: 403,
-        message: "Wrong email or password. Please check again!"
+        message:
+          "There's something wrong with login. Please check your email or password!"
       });
     }
+  } catch (error) {
+    console.log(error.message);
+    next({ status: 500, message: "Internal Server Error!" });
+  }
+};
+
+const updateProfile = async (req, res, next) => {
+  try {
+    const dataProfile = req.body;
+    const { first_name, last_name, phone } = dataProfile;
+    const [account] = await userModel.searchAccount(dataProfile.email);
+    if (!account) {
+      return next({
+        status: 403,
+        message: "Is this your account? Please check your email!"
+      });
+    }
+    const profile = {
+      first_name,
+      last_name,
+      phone,
+      updated_at: new Date()
+    };
+    const result = await userModel.updateProfile(profile, dataProfile.email);
+    console.log(result);
+    standardResponse.responses(res, profile, 200, "Update Profile Success!");
   } catch (error) {
     console.log(error.message);
     next({ status: 500, message: "Internal Server Error!" });
@@ -191,5 +216,6 @@ module.exports = {
   detailsAccount,
   searchUsers,
   signUp,
-  login
+  login,
+  updateProfile
 };

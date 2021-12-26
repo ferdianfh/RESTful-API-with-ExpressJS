@@ -1,16 +1,23 @@
 const express = require("express");
 const userController = require("../controller/users");
+const commonMiddle = require("../middleware/custMiddle");
+const validation = require("../middleware/validation");
 
 const router = express.Router();
 
 router
-  .post("/", userController.createAccount)
-  .get("/", userController.listAccounts)
-  .put("/:id", userController.updateAccount)
-  .delete("/:id", userController.deleteAccount)
-  .get("/details/:id", userController.detailsAccount)
-  .get("/search", userController.searchUsers)
   .post("/registration", userController.signUp)
-  .post("/login", userController.login);
+  .post("/login", userController.login)
+  .put(
+    "/profile",
+    validation.validateUpdateProfile,
+    userController.updateProfile
+  )
+  .post("/", commonMiddle.isAdmin, userController.createAccount)
+  .get("/", commonMiddle.isAdmin, userController.listAccounts)
+  .put("/:id", commonMiddle.isAdmin, userController.updateAccount)
+  .delete("/:id", commonMiddle.isAdmin, userController.deleteAccount)
+  .get("/details/:id", commonMiddle.isAdmin, userController.detailsAccount)
+  .get("/search", commonMiddle.isAdmin, userController.searchUsers);
 
 module.exports = router;

@@ -128,6 +128,22 @@ const createNewAccount = (account) => {
   });
 };
 
+const updateProfile = (profile, id) => {
+  return new Promise((resolve, reject) => {
+    connection.query(
+      "UPDATE users SET ? WHERE email = ?",
+      [profile, id],
+      (error, result) => {
+        if (!error) {
+          resolve(result);
+        } else {
+          reject(error);
+        }
+      }
+    );
+  });
+};
+
 module.exports = {
   createAccount,
   listAccounts,
@@ -137,5 +153,6 @@ module.exports = {
   searchUsers,
   calculateAccount,
   searchAccount,
-  createNewAccount
+  createNewAccount,
+  updateProfile
 };

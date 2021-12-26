@@ -31,9 +31,10 @@ const listWallets = async (req, res, next) => {
 
 const updateWallet = async (req, res, next) => {
   const id = req.params.id;
-  const { id_user, balance } = req.body;
+  const { PIN, topup, balance } = req.body;
   const data = {
-    id_user: id_user,
+    PIN: PIN,
+    topup,
     balance: balance,
     updated_at: new Date()
   };

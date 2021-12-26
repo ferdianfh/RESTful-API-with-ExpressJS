@@ -1,11 +1,9 @@
+const standardResponse = require("../helper/responseHandle");
+
 const errorHandling = (err, req, res, next) => {
   const statusCode = err.status;
   const message = err.message;
-  res.status("500");
-  res.json({
-    status: statusCode,
-    message: message
-  });
+  standardResponse.responses(res, null, statusCode, message);
 };
 
 module.exports = { errorHandling };
