@@ -341,4 +341,6 @@ Response :
 
 Here is ERD for Zwallet:
 
-![Zwallet ERD](./img/Zwallet-ERD-revisi-3.png) [click here to jump to my anchor](#custom_anchor_name)
+![Zwallet ERD](./img/Zwallet-ERD-revisi-3.png)
+
+[Back to Top](#custom_anchor_name)
