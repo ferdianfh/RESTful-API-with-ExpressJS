@@ -4,7 +4,7 @@ const connection = require("../config/database");
 const displayJoinTables = () => {
   return new Promise((resolve, reject) => {
     connection.query(
-      "SELECT wallet.id_user, users.email, transaction.id_wallet_sender, transaction.id_wallet_receiver, amount_transfer, transaction.notes, transaction.date FROM wallet JOIN users ON (wallet.id_user = users.id) JOIN transaction ON (transaction.id_wallet_sender = wallet.id)",
+      "SELECT users.id, users.email, users.phone, wallet.id, wallet.PIN, wallet.balance FROM wallet JOIN users ON (user.id = wallet.user_ID)",
       (error, result) => {
         if (!error) {
           resolve(result);

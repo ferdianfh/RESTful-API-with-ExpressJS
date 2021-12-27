@@ -1,14 +1,145 @@
 # API Specification
 
+## Registration
+
+Request :
+
+- Method : POST
+- Endpoint : `/api/users/registration`
+- Header :
+  - Content-Type: application/json
+  - Accept: application/json
+- Body :
+
+```json
+{
+  "username": "string",
+  "email": "string",
+  "password": "string"
+}
+```
+
+Response :
+
+```json
+{
+  "status": "string",
+  "code": "number",
+  "data": {
+    "id": "string",
+    "username": "string",
+    "email": "string",
+    "password": "string"
+  },
+  "message": "Registration success!"
+}
+```
+
+## Login
+
+Request :
+
+- Method : POST
+- Endpoint : `/api/users/login`
+- Header :
+  - Content-Type: application/json
+  - Accept: application/json
+- Body :
+
+```json
+{
+  "email": "string",
+  "password": "string"
+}
+```
+
+Response :
+
+```json
+{
+  "status": "string",
+  "code": "number",
+  "data": {
+    "id": "string",
+    "username": "string",
+    "email": "string",
+    "password": "string",
+    "first_name": "string",
+    "last_name": "string",
+    "phone": "character"
+  },
+  "message": "Login success!"
+}
+```
+
+## List Users
+
+Request :
+
+- Method : GET
+- Endpoint : `/api/users`
+- Header :
+  - Accept: application/json
+  - Auth: admin
+- Query Param :
+  - sort : string,
+  - order : string
+- Pagination :
+  - currentPage: integer,
+  - limit: integer,
+  - totalUser: integer,
+  - totalPage: integer
+
+Response :
+
+```json
+{
+  "status": "string",
+  "code": "number",
+  "data": [
+    {
+      "id": "string, unique",
+      "username": "string",
+      "email": "string",
+      "password": "string",
+      "first_name": "string",
+      "last_name": "string",
+      "phone": "character",
+      "createdAt": "date",
+      "updatedAt": "date"
+    },
+    {
+      "id": "string, unique",
+      "username": "string",
+      "email": "string",
+      "password": "string",
+      "first_name": "string",
+      "last_name": "string",
+      "phone": "character",
+      "createdAt": "date",
+      "updatedAt": "date"
+    }
+  ],
+  "message": "Data requests success!",
+  "pagination": {
+    "currentPage": "integer",
+    "limit": "integer",
+    "totalAccount": "integer",
+    "totalPage": "integer"
+  }
+}
+```
+
 ## Create User
 
 Request :
 
 - Method : POST
-- Endpoint : `/api/admin/users/create`
+- Endpoint : `/api/users`
 - Header :
   - Content-Type: application/json
   - Accept: application/json
+  - Auth: admin
 - Body :
 
 ```json
@@ -29,55 +160,14 @@ Response :
   "status": "string",
   "code": "number",
   "data": {
-    "fieldCount": "integer",
-    "affectedRows": "integer",
-    "insertId": "integer",
-    "info": null,
-    "serverStatus": "integer",
-    "warningStatus": "integer"
+    "username": "string",
+    "email": "string",
+    "password": "string",
+    "first_name": "string",
+    "last_name": "string",
+    "phone": "character"
   },
   "message": "Data requests input success!"
-}
-```
-
-## List Users
-
-Request :
-
-- Method : GET
-- Endpoint : `/api/admin/users/list`
-- Header :
-  - Accept: application/json
-
-Response :
-
-```json
-{
-  "status": "string",
-  "code": "number",
-  "data": [
-    {
-      "id": "integer, unique",
-      "username": "string",
-      "email": "string",
-      "first_name": "string",
-      "last_name": "string",
-      "phone": "character",
-      "createdAt": "date",
-      "updatedAt": "date"
-    },
-    {
-      "id": "integer, unique",
-      "username": "string",
-      "email": "string",
-      "first_name": "string",
-      "last_name": "string",
-      "phone": "character",
-      "createdAt": "date",
-      "updatedAt": "date"
-    }
-  ],
-  "message": "Data requests success!"
 }
 ```
 
@@ -86,7 +176,7 @@ Response :
 Request :
 
 - Method : PUT
-- Endpoint : `/api/admin/users/update/{id_user}`
+- Endpoint : `/api/users/{id_user}`
 - Header :
   - Content-Type: application/json
   - Accept: application/json
@@ -109,12 +199,13 @@ Response :
   "status": "string",
   "code": "number",
   "data": {
-    "fieldCount": "integer",
-    "affectedRows": "integer",
-    "insertId": "integer",
-    "info": null,
-    "serverStatus": "integer",
-    "warningStatus": "integer"
+    "id": "string",
+    "username": "string",
+    "email": "string",
+    "password": "string",
+    "first_name": "string",
+    "last_name": "string",
+    "phone": "character"
   },
   "message": "Data request update success!"
 }
@@ -125,7 +216,7 @@ Response :
 Request :
 
 - Method : GET
-- Endpoint : `/api/admin/users/details/{id_user}`
+- Endpoint : `/api/users/details/{id_user}`
 - Header :
   - Accept: application/json
 
@@ -139,6 +230,7 @@ Response :
     "id": "integer, unique",
     "username": "string",
     "email": "string",
+    "password": "string",
     "first_name": "string",
     "last_name": "string",
     "phone": "character",
@@ -154,7 +246,7 @@ Response :
 Request :
 
 - Method : DELETE
-- Endpoint : `/api/admin/users/remove/{id_user}`
+- Endpoint : `/api/users/{id_user}`
 - Header :
   - Accept: application/json
 
@@ -173,7 +265,7 @@ Response :
 Request :
 
 - Method : GET
-- Endpoint : `/api/admin/users/search`
+- Endpoint : `/api/users/search`
 - Header :
   - Accept: application/json
 - Query Param :
@@ -209,7 +301,7 @@ Response :
 Request :
 
 - Method : GET
-- Endpoint : `/api/admin/join/wallet-user-transaction`
+- Endpoint : `/api/join/wallet-user-transaction`
 - Header :
   - Accept: application/json
 
@@ -243,8 +335,8 @@ Response :
 }
 ```
 
-## Entity Relational Diagram
+## Entity Relationship Diagram
 
 Here is ERD for Zwallet:
 
-![Zwallet ERD](./img/Zwallet-ERD.png)
+![Zwallet ERD](./img/Zwallet-ERD-revisi-3.png)

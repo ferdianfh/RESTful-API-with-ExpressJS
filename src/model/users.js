@@ -131,7 +131,7 @@ const createNewAccount = (account) => {
 const updateProfile = (profile, id) => {
   return new Promise((resolve, reject) => {
     connection.query(
-      "UPDATE users SET ? WHERE email = ?",
+      "UPDATE users SET ? WHERE id = ?",
       [profile, id],
       (error, result) => {
         if (!error) {

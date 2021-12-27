@@ -72,3 +72,8 @@ SELECT wallet.id_user, users.email, transaction.wallet_ID, transaction.phone_rec
 FROM wallet
 JOIN users ON (wallet.id_user = users.id)
 JOIN transaction ON (transaction.wallet_ID = wallet.id);
+
+-- Details Account 
+SELECT users.id, users.email, users.phone, wallet.id, wallet.balance, wallet.balance
+FROM users
+JOIN wallet ON (user.id = wallet.user_ID);
