@@ -1,5 +1,5 @@
 const responses = (res, result, status, message, pagination) => {
-  res.status("200");
+  res.status(status);
   res.json({
     status: "Success",
     code: status,

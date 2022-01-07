@@ -4,6 +4,7 @@ const { v4: uuidv4 } = require("uuid");
 const userModel = require("../model/users");
 const walletModel = require("../model/wallet");
 const standardResponse = require("../helper/responseHandle");
+const createError = require("http-errors");
 
 const createAccount = async (req, res, next) => {
   const { username, email, password, first_name, last_name, phone } = req.body;
@@ -160,21 +161,13 @@ const login = async (req, res, next) => {
     const { email, password } = req.body;
     const [account] = await userModel.searchAccount(email);
     if (!account) {
-      return next({
-        status: 403,
-        message:
-          "There's something wrong with login. Please check your email or password!"
-      });
+      return next(createError(403, "Please check your email or password!"));
     }
     const checkPassword = await bcrypt.compare(password, account.password);
     if (checkPassword) {
       standardResponse.responses(res, account, 200, "Login success!");
     } else {
-      return next({
-        status: 403,
-        message:
-          "There's something wrong with login. Please check your email or password!"
-      });
+      return next(createError(403, "Please check your email or password!"));
     }
   } catch (error) {
     console.log(error.message);
