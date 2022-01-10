@@ -73,6 +73,7 @@ const detailsWallet = async (req, res, next) => {
   try {
     const result = await walletModel.detailsWallet(id);
     const [detailResult] = result;
+    console.log(result);
     standardResponse.responses(
       res,
       detailResult,
