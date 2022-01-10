@@ -167,7 +167,7 @@ const login = async (req, res, next) => {
     }
     const checkPassword = await bcrypt.compare(password, account.password);
     if (checkPassword) {
-      standardResponse.responses(res, null, 200, "Login success!");
+      standardResponse.responses(res, account, 200, "Login success!");
     } else {
       return next({
         status: 403,
