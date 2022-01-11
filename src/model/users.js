@@ -55,7 +55,7 @@ const deleteAccount = (id) => {
     });
   });
 };
-
+// this is fo fetching so many data in Frontend
 const detailsAccount = (id) => {
   return new Promise((resolve, reject) => {
     connection.query(
