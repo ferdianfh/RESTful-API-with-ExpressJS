@@ -77,3 +77,10 @@ JOIN transaction ON (transaction.wallet_ID = wallet.id);
 SELECT users.id, users.email, users.phone, wallet.id, wallet.balance, wallet.balance
 FROM users
 JOIN wallet ON (user.id = wallet.user_ID);
+
+
+-- env
+-- DB_HOST = 34.205.92.193
+-- DB_USER = fazz3ferdi
+-- DB_PASS = ferdifFazz1234#
+-- DB_NAME = fazz3ferdi_zwallet

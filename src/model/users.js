@@ -15,7 +15,7 @@ const createAccount = (data) => {
 const listAccounts = ({ sort, order, limit, offset }) => {
   return new Promise((resolve, reject) => {
     connection.query(
-      `SELECT * FROM users ORDER BY ?? ${order} LIMIT ? OFFSET ?`,
+      `SELECT users.id, users.email, users.phone, users.first_name, users.last_name, users.created_at, users.updated_at FROM users ORDER BY ?? ${order} LIMIT ? OFFSET ?`,
       [sort, limit, offset],
       (error, result) => {
         if (!error) {
@@ -128,11 +128,11 @@ const createNewAccount = (account) => {
   });
 };
 
-const updateProfile = (profile, id) => {
+const updateProfile = (profile, email) => {
   return new Promise((resolve, reject) => {
     connection.query(
-      "UPDATE users SET ? WHERE id = ?",
-      [profile, id],
+      "UPDATE users SET ? WHERE email = ?",
+      [profile, email],
       (error, result) => {
         if (!error) {
           resolve(result);

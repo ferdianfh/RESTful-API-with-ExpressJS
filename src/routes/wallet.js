@@ -6,8 +6,9 @@ const router = express.Router();
 
 router
   .get("/", commonMiddle.isAdmin, walletController.listWallets)
-  .put("/:id", commonMiddle.isAdmin, walletController.updateWallet)
+  .put("/:id", walletController.updateWallet)
   .delete("/:id", commonMiddle.isAdmin, walletController.deleteWallet)
-  .get("/details/:id", commonMiddle.isAdmin, walletController.detailsWallet);
+  .get("/details/:id", commonMiddle.isAdmin, walletController.detailsWallet)
+  .put("/create-pin/:id", walletController.createPIN);
 
 module.exports = router;

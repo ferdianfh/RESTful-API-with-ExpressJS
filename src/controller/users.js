@@ -182,8 +182,9 @@ const login = async (req, res, next) => {
 
 const updateProfile = async (req, res, next) => {
   try {
+    // const id = req.params.id;
     const dataProfile = req.body;
-    const { first_name, last_name, phone } = dataProfile;
+    // const { first_name, last_name, phone } = dataProfile;
     const [account] = await userModel.searchAccount(dataProfile.email);
     if (!account) {
       return next({
@@ -192,9 +193,9 @@ const updateProfile = async (req, res, next) => {
       });
     }
     const profile = {
-      first_name,
-      last_name,
-      phone,
+      first_name: dataProfile.first_name,
+      last_name: dataProfile.last_name,
+      phone: dataProfile.phone,
       updated_at: new Date()
     };
     const result = await userModel.updateProfile(profile, dataProfile.email);

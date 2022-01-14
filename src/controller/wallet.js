@@ -86,9 +86,26 @@ const detailsWallet = async (req, res, next) => {
   }
 };
 
+const createPIN = async (req, res, next) => {
+  const id = req.params.id;
+  const { PIN } = req.body;
+  const newPIN = {
+    PIN: PIN,
+    updated_at: new Date()
+  };
+  try {
+    const result = await walletModel.updateWallet(newPIN, id);
+    standardResponse.responses(res, result, 200, "New PIN Created!");
+  } catch (error) {
+    console.log(error.message);
+    next({ status: 500, message: "Internal Server Error!" });
+  }
+};
+
 module.exports = {
   listWallets,
   updateWallet,
   deleteWallet,
-  detailsWallet
+  detailsWallet,
+  createPIN
 };
