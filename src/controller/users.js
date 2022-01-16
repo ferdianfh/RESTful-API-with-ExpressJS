@@ -93,11 +93,10 @@ const detailsAccount = async (req, res, next) => {
   const id = req.params.id;
   try {
     const result = await userModel.detailsAccount(id);
-    const [detailResult] = result;
-    console.log(detailResult);
+    console.log(result);
     standardResponse.responses(
       res,
-      detailResult,
+      result,
       200,
       "Data requests Detail User success!"
     );
