@@ -76,7 +76,7 @@ const detailsAccount = (id) => {
 const searchUsers = ({ search, sort, order }) => {
   return new Promise((resolve, reject) => {
     connection.query(
-      `SELECT id, first_name, last_name, email, phone FROM users WHERE first_name LIKE '%${search}%' ORDER BY ?? ${order}`,
+      `SELECT id, first_name, last_name, email, phone, created_at, updated_at FROM users WHERE first_name LIKE '%${search}%' ORDER BY ?? ${order}`,
       sort,
       (error, result) => {
         if (!error) {
