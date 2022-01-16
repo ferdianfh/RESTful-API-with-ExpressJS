@@ -1,14 +1,17 @@
 /* eslint-disable camelcase */
 const transactionModel = require("../model/transaction");
 const standardResponse = require("../helper/responseHandle");
+const { v4: uuidv4 } = require("uuid");
 
 const createTransaction = async (req, res, next) => {
   const { wallet_ID, phone_receiver, amount_transfer, notes } = req.body;
   const data = {
+    id: uuidv4(),
     wallet_ID: wallet_ID,
     phone_receiver: phone_receiver,
     amount_transfer: amount_transfer,
-    notes: notes
+    notes: notes,
+    date: new Date()
   };
   try {
     const result = await transactionModel.createTransaction(data);
@@ -20,7 +23,7 @@ const createTransaction = async (req, res, next) => {
     );
   } catch (error) {
     console.log(error.message);
-    next({ status: 500, message: "Internal Server Error!" });
+    next({ status: 500, message: error.message });
   }
 };
 

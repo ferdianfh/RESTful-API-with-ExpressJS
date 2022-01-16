@@ -59,7 +59,7 @@ const deleteAccount = (id) => {
 const detailsAccount = (id) => {
   return new Promise((resolve, reject) => {
     connection.query(
-      "SELECT users.id, users.first_name, users.last_name, users.email, users.phone, wallet.id as wallet_id, wallet.user_ID, wallet.balance FROM users INNER JOIN wallet ON users.id = wallet.user_ID WHERE users.id = ?",
+      "SELECT users.id, users.first_name, users.last_name, users.email, users.phone, wallet.id as wallet_id, wallet.balance FROM users INNER JOIN wallet ON users.id = wallet.user_ID WHERE users.id = ?",
       id,
       (error, result) => {
         if (!error) {

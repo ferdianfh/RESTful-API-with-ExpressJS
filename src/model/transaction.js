@@ -15,7 +15,7 @@ const createTransaction = (data) => {
 const listTransaction = ({ sort, order, limit, offset }) => {
   return new Promise((resolve, reject) => {
     connection.query(
-      `SELECT * FROM transaction ORDER BY ?? ${order} LIMIT ? OFFSET ?`,
+      `SELECT users.first_name, users.last_name, users.phone_number, wallet.user_ID, transaction.wallet_ID, transaction.phone_receiver, transaction.amount_transfer, transaction.date FROM transaction INNER JOIN wallet ON transaction.wallet_ID = wallet.wallet_ID INNER JOIN users ON wallet.user_ID = users.users_ID ORDER BY ?? ${order} LIMIT ? OFFSET ?`,
       [sort, limit, offset],
       (error, result) => {
         if (!error) {

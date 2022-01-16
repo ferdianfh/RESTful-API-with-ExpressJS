@@ -94,11 +94,12 @@ const detailsAccount = async (req, res, next) => {
   try {
     const result = await userModel.detailsAccount(id);
     const [detailResult] = result;
+    console.log(detailResult);
     standardResponse.responses(
       res,
       detailResult,
       200,
-      "Data requests success!"
+      "Data requests Detail User success!"
     );
   } catch (error) {
     console.log(error.message);
