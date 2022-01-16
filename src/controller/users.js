@@ -90,13 +90,13 @@ const deleteAccount = async (req, res, next) => {
 };
 
 const detailsAccount = async (req, res, next) => {
-  const id = req.params.id;
   try {
+    const id = req.params.id;
     const result = await userModel.detailsAccount(id);
-    console.log(result);
+    const [detailsResult] = result;
     standardResponse.responses(
       res,
-      result,
+      detailsResult,
       200,
       "Data requests Detail User success!"
     );
