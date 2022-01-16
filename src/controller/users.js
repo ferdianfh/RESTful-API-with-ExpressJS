@@ -108,7 +108,7 @@ const detailsAccount = async (req, res, next) => {
 
 const searchUsers = async (req, res, next) => {
   try {
-    const search = req.query.username;
+    const search = req.query.name;
     const sort = req.query.sort;
     const order = req.query.order;
 

@@ -17,7 +17,7 @@ router
   .get("/", commonMiddle.isAdmin, userController.listAccounts)
   .put("/:id", commonMiddle.isAdmin, userController.updateAccount)
   .delete("/:id", commonMiddle.isAdmin, userController.deleteAccount)
-  .get("/:id", commonMiddle.isAdmin, userController.detailsAccount)
+  .get("/details/:id", commonMiddle.isAdmin, userController.detailsAccount)
   .get("/search", commonMiddle.isAdmin, userController.searchUsers);
 
 module.exports = router;
