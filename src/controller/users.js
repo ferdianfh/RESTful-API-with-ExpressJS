@@ -126,7 +126,7 @@ const searchUsers = async (req, res, next) => {
 
 const signUp = async (req, res, next) => {
   try {
-    const { username, email, password } = req.body;
+    const { first_name, last_name, email, password } = req.body;
     const userId = uuidv4();
     const user = await userModel.searchAccount(email);
     if (user.length > 0) {
@@ -136,7 +136,8 @@ const signUp = async (req, res, next) => {
     const hashPassword = await bcrypt.hash(password, saltRounds);
     const account = {
       id: userId,
-      username,
+      first_name,
+      last_name,
       email,
       password: hashPassword
     };
