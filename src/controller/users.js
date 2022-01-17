@@ -194,8 +194,6 @@ const updateProfile = async (req, res, next) => {
     //   });
     // }
     const profile = {
-      first_name: dataProfile.first_name,
-      last_name: dataProfile.last_name,
       phone: dataProfile.phone,
       updated_at: new Date()
     };
