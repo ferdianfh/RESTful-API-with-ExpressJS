@@ -9,7 +9,7 @@ router
   .post("/registration", userController.signUp)
   .post("/login", userController.login)
   .put(
-    "/profile",
+    "/profile/:id",
     validation.validateUpdateProfile,
     userController.updateProfile
   )

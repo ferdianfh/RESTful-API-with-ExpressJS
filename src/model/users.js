@@ -129,11 +129,11 @@ const createNewAccount = (account) => {
   });
 };
 
-const updateProfile = (profile, email) => {
+const updateProfile = (profile, id) => {
   return new Promise((resolve, reject) => {
     connection.query(
-      "UPDATE users SET ? WHERE email = ?",
-      [profile, email],
+      "UPDATE users SET ? WHERE id = ?",
+      [profile, id],
       (error, result) => {
         if (!error) {
           resolve(result);

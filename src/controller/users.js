@@ -183,23 +183,23 @@ const login = async (req, res, next) => {
 
 const updateProfile = async (req, res, next) => {
   try {
-    // const id = req.params.id;
+    const id = req.params.id;
     const dataProfile = req.body;
     // const { first_name, last_name, phone } = dataProfile;
-    const [account] = await userModel.searchAccount(dataProfile.email);
-    if (!account) {
-      return next({
-        status: 403,
-        message: "Is this your account? Please check your email!"
-      });
-    }
+    // const [account] = await userModel.searchAccount(dataProfile.email);
+    // if (!account) {
+    //   return next({
+    //     status: 403,
+    //     message: "Is this your account? Please check your email!"
+    //   });
+    // }
     const profile = {
       first_name: dataProfile.first_name,
       last_name: dataProfile.last_name,
       phone: dataProfile.phone,
       updated_at: new Date()
     };
-    const result = await userModel.updateProfile(profile, dataProfile.email);
+    const result = await userModel.updateProfile(profile, id);
     console.log(result);
     standardResponse.responses(res, profile, 200, "Update Profile Success!");
   } catch (error) {
