@@ -87,11 +87,45 @@ const calculateWallet = () => {
   });
 };
 
+const searchWallet = (userId) => {
+  return new Promise((resolve, reject) => {
+    connection.query(
+      "SELECT * FROM wallet WHERE user_ID = ?",
+      userId,
+      (error, result) => {
+        if (!error) {
+          resolve(result);
+        } else {
+          reject(error);
+        }
+      }
+    );
+  });
+};
+
+const topUp = (data, userId) => {
+  return new Promise((resolve, reject) => {
+    connection.query(
+      "UPDATE wallet SET ? WHERE user_ID = ?",
+      [data, userId],
+      (error, result) => {
+        if (!error) {
+          resolve(result);
+        } else {
+          reject(error);
+        }
+      }
+    );
+  });
+};
+
 module.exports = {
   createWallet,
   listWallets,
   updateWallet,
   deleteWallet,
   detailsWallet,
-  calculateWallet
+  calculateWallet,
+  searchWallet,
+  topUp
 };

@@ -9,6 +9,7 @@ router
   .put("/:id", walletController.updateWallet)
   .delete("/:id", commonMiddle.isAdmin, walletController.deleteWallet)
   .get("/details/:id", commonMiddle.isAdmin, walletController.detailsWallet)
-  .put("/create-pin/:id", walletController.createPIN);
+  .put("/create-pin/:id", walletController.createPIN)
+  .put("/topup/:id", walletController.topUp);
 
 module.exports = router;

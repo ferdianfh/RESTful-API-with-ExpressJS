@@ -102,10 +102,38 @@ const createPIN = async (req, res, next) => {
   }
 };
 
+const topUp = async (req, res, next) => {
+  const userId = req.params.id;
+  const topup = parseInt(req.body.topup);
+  const [wallet] = await walletModel.searchWallet(userId);
+  console.log(wallet);
+  console.log(wallet.balance);
+  const balanceAfter = parseInt(wallet.balance + topup);
+  const data = {
+    topup,
+    balance: balanceAfter,
+    updated_at: new Date()
+  };
+  try {
+    const result = await walletModel.topUp(data, userId);
+    console.log(result);
+    standardResponse.responses(
+      res,
+      data,
+      200,
+      `Top Up ${balanceAfter} success!`
+    );
+  } catch (error) {
+    console.log(error.message);
+    next({ status: 500, message: "Internal Server Error!" });
+  }
+};
+
 module.exports = {
   listWallets,
   updateWallet,
   deleteWallet,
   detailsWallet,
-  createPIN
+  createPIN,
+  topUp
 };
