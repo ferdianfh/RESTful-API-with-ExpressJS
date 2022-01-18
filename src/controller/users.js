@@ -166,9 +166,18 @@ const login = async (req, res, next) => {
         message: "Please check your email or password!"
       });
     }
+    const dataLogin = {
+      id: account.id,
+      email: account.email,
+      first_name: account.first_name,
+      last_name: account.last_name,
+      phone: account.phone,
+      created_at: account.created_at,
+      updated_at: account.updated_at
+    };
     const checkPassword = await bcrypt.compare(password, account.password);
     if (checkPassword) {
-      standardResponse.responses(res, account, 200, "Login success!");
+      standardResponse.responses(res, dataLogin, 200, "Login success!");
     } else {
       return next({
         status: 403,
