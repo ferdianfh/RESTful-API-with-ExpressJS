@@ -1,14 +1,13 @@
 require("dotenv").config();
 const express = require("express");
-const commonMiddle = require("./src/middleware/custMiddle");
+const morgan = require("morgan");
+const cors = require("cors");
 const userRoutes = require("./src/routes/users");
 const walletRoutes = require("./src/routes/wallet");
 const transactionRoutes = require("./src/routes/transaction");
-const joinTableRoutes = require("./src/routes/adminJoinTables");
+const commonMiddle = require("./src/middleware/custMiddle");
 const commonHelper = require("./src/helper/notFoundHandle");
 const errorHelper = require("./src/helper/errorHandle");
-const morgan = require("morgan");
-const cors = require("cors");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -24,7 +23,7 @@ app.use(morgan("dev"));
 app.use("/users", userRoutes);
 app.use("/wallet", walletRoutes);
 app.use("/transaction", transactionRoutes);
-app.use("/join", joinTableRoutes);
+app.use("/file", express.static("./uploads"));
 
 // helpers
 app.use(commonHelper.helperMessage);

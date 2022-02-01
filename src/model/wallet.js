@@ -2,7 +2,7 @@ const connection = require("../config/database");
 
 const createWallet = (wallet) => {
   return new Promise((resolve, reject) => {
-    connection.query("INSERT INTO wallet SET ?", wallet, (error, result) => {
+    connection.query("INSERT INTO wallets SET ?", wallet, (error, result) => {
       if (!error) {
         resolve(result);
       } else {
@@ -15,7 +15,7 @@ const createWallet = (wallet) => {
 const listWallets = ({ sort, order, limit, offset }) => {
   return new Promise((resolve, reject) => {
     connection.query(
-      `SELECT * FROM wallet ORDER BY ?? ${order} LIMIT ? OFFSET ?`,
+      `SELECT * FROM wallets ORDER BY ?? ${order} LIMIT ? OFFSET ?`,
       [sort, limit, offset],
       (error, result) => {
         if (!error) {
@@ -31,7 +31,7 @@ const listWallets = ({ sort, order, limit, offset }) => {
 const updateWallet = (data, id) => {
   return new Promise((resolve, reject) => {
     connection.query(
-      "UPDATE wallet SET ? WHERE id = ?",
+      "UPDATE wallets SET ? WHERE id = ?",
       [data, id],
       (error, result) => {
         if (!error) {
@@ -59,7 +59,7 @@ const deleteWallet = (id) => {
 const detailsWallet = (id) => {
   return new Promise((resolve, reject) => {
     connection.query(
-      "SELECT * FROM wallet WHERE id = ?",
+      "SELECT * FROM wallets WHERE id = ?",
       id,
       (error, result) => {
         if (!error) {
@@ -75,7 +75,7 @@ const detailsWallet = (id) => {
 const calculateWallet = () => {
   return new Promise((resolve, reject) => {
     connection.query(
-      "SELECT COUNT(*) AS total FROM wallet",
+      "SELECT COUNT(*) AS total FROM wallets",
       (error, result) => {
         if (!error) {
           resolve(result);
@@ -90,7 +90,7 @@ const calculateWallet = () => {
 const searchWallet = (userId) => {
   return new Promise((resolve, reject) => {
     connection.query(
-      "SELECT * FROM wallet WHERE user_ID = ?",
+      "SELECT * FROM wallets WHERE user_id = ?",
       userId,
       (error, result) => {
         if (!error) {
@@ -106,7 +106,7 @@ const searchWallet = (userId) => {
 const topUp = (data, userId) => {
   return new Promise((resolve, reject) => {
     connection.query(
-      "UPDATE wallet SET ? WHERE user_ID = ?",
+      "UPDATE wallets SET ? WHERE user_id = ?",
       [data, userId],
       (error, result) => {
         if (!error) {

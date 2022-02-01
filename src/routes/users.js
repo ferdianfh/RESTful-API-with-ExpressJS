@@ -1,23 +1,21 @@
 const express = require("express");
-const userController = require("../controller/users");
-const commonMiddle = require("../middleware/custMiddle");
-const validation = require("../middleware/validation");
+const userControllers = require("../controller/users");
+const { verifyAccess, isAdmin } = require("../middleware/auth");
+const upload = require("../middleware/upload");
 
 const router = express.Router();
 
 router
-  .post("/registration", userController.signUp)
-  .post("/login", userController.login)
+  .post("/register", userControllers.signUp)
+  .post("/login", userControllers.login)
+  .get("/", verifyAccess, userControllers.listAccounts)
+  .get("/profile", verifyAccess, userControllers.profile)
   .put(
-    "/profile/:id",
-    validation.validateUpdateProfile,
-    userController.updateProfile
+    "/profile",
+    verifyAccess,
+    upload.single("picture"),
+    userControllers.addProfilePicture
   )
-  .post("/", commonMiddle.isAdmin, userController.createAccount)
-  .get("/", commonMiddle.isAdmin, userController.listAccounts)
-  .put("/:id", commonMiddle.isAdmin, userController.updateAccount)
-  .delete("/:id", commonMiddle.isAdmin, userController.deleteAccount)
-  .get("/details/:id", commonMiddle.isAdmin, userController.detailsAccount)
-  .get("/search", commonMiddle.isAdmin, userController.searchUsers);
+  .delete("/profile/:id", verifyAccess, isAdmin, userControllers.deleteAccount);
 
 module.exports = router;

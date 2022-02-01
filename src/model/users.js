@@ -1,106 +1,5 @@
 const connection = require("../config/database");
 
-const createAccount = (data) => {
-  return new Promise((resolve, reject) => {
-    connection.query("INSERT INTO users SET ?", data, (error, result) => {
-      if (!error) {
-        resolve(result);
-      } else {
-        reject(error);
-      }
-    });
-  });
-};
-
-const listAccounts = ({ sort, order, limit, offset }) => {
-  return new Promise((resolve, reject) => {
-    connection.query(
-      `SELECT users.id, users.email, users.phone, users.first_name, users.last_name, users.created_at, users.updated_at FROM users ORDER BY ?? ${order} LIMIT ? OFFSET ?`,
-      [sort, limit, offset],
-      (error, result) => {
-        if (!error) {
-          resolve(result);
-        } else {
-          reject(error);
-        }
-      }
-    );
-  });
-};
-
-const updateAccount = (data, id) => {
-  return new Promise((resolve, reject) => {
-    connection.query(
-      "UPDATE users SET ? WHERE id = ?",
-      [data, id],
-      (error, result) => {
-        if (!error) {
-          resolve(result);
-        } else {
-          reject(error);
-        }
-      }
-    );
-  });
-};
-
-const deleteAccount = (id) => {
-  return new Promise((resolve, reject) => {
-    connection.query("DELETE FROM users WHERE id = ?", id, (error, result) => {
-      if (!error) {
-        resolve(result);
-      } else {
-        reject(error);
-      }
-    });
-  });
-};
-
-// this is for fetching so many data in Frontend
-const detailsAccount = (id) => {
-  return new Promise((resolve, reject) => {
-    connection.query(
-      "SELECT users.id, users.first_name, users.last_name, users.email, users.phone, wallet.id as wallet_id, wallet.balance FROM users INNER JOIN wallet ON users.id = wallet.user_ID WHERE users.id = ?",
-      id,
-      (error, result) => {
-        if (!error) {
-          resolve(result);
-        } else {
-          reject(error);
-        }
-      }
-    );
-  });
-};
-
-const searchUsers = ({ search, sort, order }) => {
-  return new Promise((resolve, reject) => {
-    connection.query(
-      `SELECT id, first_name, last_name, email, phone, created_at, updated_at FROM users WHERE first_name LIKE '%${search}%' ORDER BY ?? ${order}`,
-      sort,
-      (error, result) => {
-        if (!error) {
-          resolve(result);
-        } else {
-          reject(error);
-        }
-      }
-    );
-  });
-};
-
-const calculateAccount = () => {
-  return new Promise((resolve, reject) => {
-    connection.query("SELECT COUNT(*) AS total FROM users", (error, result) => {
-      if (!error) {
-        resolve(result);
-      } else {
-        reject(error);
-      }
-    });
-  });
-};
-
 const searchAccount = (email) => {
   return new Promise((resolve, reject) => {
     connection.query(
@@ -129,11 +28,67 @@ const createNewAccount = (account) => {
   });
 };
 
-const updateProfile = (profile, id) => {
+const listAccounts = ({ sort, order, limit, offset }) => {
   return new Promise((resolve, reject) => {
     connection.query(
-      "UPDATE users SET ? WHERE id = ?",
-      [profile, id],
+      `SELECT users.id, users.name, users.email, users.picture, users.role, users.verified, users.created_at, users.updated_at FROM users ORDER BY ?? ${order} LIMIT ? OFFSET ?`,
+      [sort, limit, offset],
+      (error, result) => {
+        if (!error) {
+          resolve(result);
+        } else {
+          reject(error);
+        }
+      }
+    );
+  });
+};
+
+const calculateAccount = () => {
+  return new Promise((resolve, reject) => {
+    connection.query("SELECT COUNT(*) AS total FROM users", (error, result) => {
+      if (!error) {
+        resolve(result);
+      } else {
+        reject(error);
+      }
+    });
+  });
+};
+
+const updateAccount = (data, email) => {
+  return new Promise((resolve, reject) => {
+    connection.query(
+      "UPDATE users SET ? WHERE email = ?",
+      [data, email],
+      (error, result) => {
+        if (!error) {
+          resolve(result);
+        } else {
+          reject(error);
+        }
+      }
+    );
+  });
+};
+
+const deleteAccount = (id) => {
+  return new Promise((resolve, reject) => {
+    connection.query("DELETE FROM users WHERE id = ?", id, (error, result) => {
+      if (!error) {
+        resolve(result);
+      } else {
+        reject(error);
+      }
+    });
+  });
+};
+
+const searchUsers = ({ search, sort, order }) => {
+  return new Promise((resolve, reject) => {
+    connection.query(
+      `SELECT id, first_name, last_name, email, phone, created_at, updated_at FROM users WHERE first_name LIKE '%${search}%' ORDER BY ?? ${order}`,
+      sort,
       (error, result) => {
         if (!error) {
           resolve(result);
@@ -146,14 +101,11 @@ const updateProfile = (profile, id) => {
 };
 
 module.exports = {
-  createAccount,
-  listAccounts,
-  updateAccount,
-  deleteAccount,
-  detailsAccount,
-  searchUsers,
-  calculateAccount,
   searchAccount,
   createNewAccount,
-  updateProfile
+  listAccounts,
+  calculateAccount,
+  updateAccount,
+  deleteAccount,
+  searchUsers
 };
