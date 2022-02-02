@@ -138,10 +138,9 @@ const profile = async (req, res, next) => {
     const [account] = await userModels.searchAccount(email);
     const profileData = {
       id: account.id,
-      name: account.name,
+      first_name: account.first_name,
+      last_name: account.last_name,
       email: account.email,
-      role: account.role,
-      verified: account.verified,
       picture: account.picture,
       created_at: account.created_at,
       updated_at: account.updated_at
