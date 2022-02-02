@@ -1,19 +1,15 @@
 const express = require("express");
 const transactionController = require("../controller/transaction");
-const commonMiddle = require("../middleware/custMiddle");
+const { isAdmin } = require("../middleware/auth");
 
 const router = express.Router();
 
 router
-  .post("/", commonMiddle.isAdmin, transactionController.createTransaction)
-  .get("/", commonMiddle.isAdmin, transactionController.listTransaction)
-  .put("/:id", commonMiddle.isAdmin, transactionController.updateTransaction)
-  .delete("/:id", commonMiddle.isAdmin, transactionController.deleteTransaction)
-  .get(
-    "/details/:id",
-    commonMiddle.isAdmin,
-    transactionController.detailsTransaction
-  )
-  .get("/", commonMiddle.isAdmin, transactionController.sortTransaction);
+  .post("/", isAdmin, transactionController.createTransaction)
+  .get("/", isAdmin, transactionController.listTransaction)
+  .put("/:id", isAdmin, transactionController.updateTransaction)
+  .delete("/:id", isAdmin, transactionController.deleteTransaction)
+  .get("/details/:id", isAdmin, transactionController.detailsTransaction)
+  .get("/", isAdmin, transactionController.sortTransaction);
 
 module.exports = router;
