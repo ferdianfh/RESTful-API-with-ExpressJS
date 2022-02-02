@@ -67,7 +67,10 @@ const verifyEmail = (req, res, next) => {
 const isAdmin = (req, res, next) => {
   const role = req.role;
   if (role !== "admin") {
-    return next({ status: 403, message: "Forbidden Access!" });
+    return next({
+      status: 403,
+      message: "Forbidden Access! You don't have right to do this action."
+    });
   }
   next();
 };

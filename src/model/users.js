@@ -31,7 +31,7 @@ const createNewAccount = (account) => {
 const listAccounts = ({ sort, order, limit, offset }) => {
   return new Promise((resolve, reject) => {
     connection.query(
-      `SELECT users.id, users.first_name, users.last_name, users.email, users.picture, users.role, users.verified, users.created_at, users.updated_at FROM users ORDER BY ?? ${order} LIMIT ? OFFSET ?`,
+      `SELECT users.id, users.first_name, users.last_name, users.email, users.phone, users.picture, users.role, users.verified, wallets.balance, users.created_at, users.updated_at FROM users INNER JOIN wallets ON wallets.user_id = users.id ORDER BY ?? ${order} LIMIT ? OFFSET ?`,
       [sort, limit, offset],
       (error, result) => {
         if (!error) {
@@ -53,6 +53,22 @@ const calculateAccount = () => {
         reject(error);
       }
     });
+  });
+};
+
+const detailsAccount = (email) => {
+  return new Promise((resolve, reject) => {
+    connection.query(
+      "SELECT users.id, users.first_name, users.last_name, users.email, users.phone, users.picture, users.role, users.verified, wallets.balance, users.created_at, users.updated_at FROM users INNER JOIN wallets ON wallets.user_id = users.id WHERE email = ?",
+      email,
+      (error, result) => {
+        if (!error) {
+          resolve(result);
+        } else {
+          reject(error);
+        }
+      }
+    );
   });
 };
 
@@ -105,6 +121,7 @@ module.exports = {
   createNewAccount,
   listAccounts,
   calculateAccount,
+  detailsAccount,
   updateAccount,
   deleteAccount,
   searchUsers

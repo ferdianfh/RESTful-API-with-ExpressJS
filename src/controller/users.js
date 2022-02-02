@@ -135,13 +135,15 @@ const listAccounts = async (req, res, next) => {
 const profile = async (req, res, next) => {
   try {
     const email = req.email;
-    const [account] = await userModels.searchAccount(email);
+    const [account] = await userModels.detailsAccount(email);
     const profileData = {
       id: account.id,
       first_name: account.first_name,
       last_name: account.last_name,
       email: account.email,
+      phone: account.phone,
       picture: account.picture,
+      balance: account.balance,
       created_at: account.created_at,
       updated_at: account.updated_at
     };
@@ -177,6 +179,29 @@ const addProfilePicture = async (req, res, next) => {
     // console.log(req.email);
     // console.log(req.file);
     console.log(result);
+  } catch (error) {
+    console.log(error.message);
+    next({ status: 500, message: "Internal Server Error!" });
+  }
+};
+
+const addPhoneNumber = async (req, res, next) => {
+  try {
+    const email = req.email;
+    const dataProfile = req.body;
+    const updatedAt = new Date();
+    const data = {
+      phone: dataProfile.phone,
+      updated_at: updatedAt
+    };
+    const result = await userModels.updateAccount(data, email);
+    console.log(result);
+    standardResponse.responses(
+      res,
+      data,
+      200,
+      `Profile phone with email: ${email} successfully updated!`
+    );
   } catch (error) {
     console.log(error.message);
     next({ status: 500, message: "Internal Server Error!" });
@@ -245,6 +270,7 @@ module.exports = {
   login,
   profile,
   addProfilePicture,
+  addPhoneNumber,
   listAccounts,
   deleteAccount,
   verifyAccount,

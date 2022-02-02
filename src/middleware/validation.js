@@ -3,7 +3,7 @@
 const joi = require("joi");
 const errorHelper = require("../helper/errorHandle");
 
-const validateUpdateProfile = (req, res, next) => {
+const validatePhoneNumber = (req, res, next) => {
   // const { email, first_name, last_name, phone } = req.body;
   const schema = joi
     .object({
@@ -19,10 +19,10 @@ const validateUpdateProfile = (req, res, next) => {
 };
 
 module.exports = {
-  validateUpdateProfile
+  validatePhoneNumber
 };
 
-// const validateUpdateProfile = (req, res, next) => {
+// const validatePhoneNumber = (req, res, next) => {
 //   // const { email, first_name, last_name, phone } = req.body;
 //   const schema = joi
 //     .object({
