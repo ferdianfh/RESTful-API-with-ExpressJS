@@ -87,11 +87,11 @@ const calculateWallet = () => {
   });
 };
 
-const searchWallet = (userId) => {
+const searchWallet = (email) => {
   return new Promise((resolve, reject) => {
     connection.query(
-      "SELECT * FROM wallets WHERE user_id = ?",
-      userId,
+      "SELECT wallets.user_id, wallets.id, users.email, users.phone, wallets.balance, wallets.amount_topup, wallets.created_at, wallets.updated_at FROM wallets INNER JOIN users ON wallets.user_id = users.id WHERE email = ?",
+      [email],
       (error, result) => {
         if (!error) {
           resolve(result);

@@ -19,7 +19,8 @@ const verifyAccess = (req, res, next) => {
     const privateKey = process.env.SECRET_KEY_JWT;
     const decoded = jwt.verify(token, privateKey);
     // console.log("hasil decoded: ", decoded);
-    req.name = decoded.name;
+    req.id = decoded.id;
+    // req.name = decoded.name;
     req.email = decoded.email;
     req.role = decoded.role;
     next();
@@ -45,7 +46,7 @@ const verifyEmail = (req, res, next) => {
     const privateKey = process.env.SECRET_KEY_JWT;
     const decoded = jwt.verify(token, privateKey);
     // console.log("hasil decoded: ", decoded);
-    req.name = decoded.name;
+    // req.name = decoded.name;
     req.email = decoded.email;
     req.role = decoded.role;
     next();
