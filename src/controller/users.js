@@ -8,7 +8,7 @@ const verification = require("../helper/emailVerification");
 
 const signUp = async (req, res, next) => {
   try {
-    const { name, email, password, PIN } = req.body;
+    const { firstName, lastName, email, password, PIN } = req.body;
     const userId = uuidv4();
     const user = await userModels.searchAccount(email);
     if (user.length > 0) {
@@ -18,7 +18,8 @@ const signUp = async (req, res, next) => {
     const hashPassword = await bcrypt.hash(password, saltRounds);
     const account = {
       id: userId,
-      name,
+      first_name: firstName,
+      last_name: lastName,
       email,
       password: hashPassword,
       PIN
@@ -35,7 +36,14 @@ const signUp = async (req, res, next) => {
     const result = await userModels.createNewAccount(account);
     const createWallet = await walletModels.createWallet(wallet);
 
-    verification.sendEmail(email);
+    const privateKey = process.env.SECRET_KEY_JWT;
+    const payload = signUpData;
+    const verifyOption = { expiresIn: "1 hours" };
+    const token = jwt.sign(payload, privateKey, verifyOption);
+    signUpData.token = token;
+    console.log(token);
+
+    verification.sendEmail(email, token);
 
     console.log(result);
     console.log(createWallet);
@@ -133,6 +141,7 @@ const profile = async (req, res, next) => {
       name: account.name,
       email: account.email,
       role: account.role,
+      verified: account.verified,
       picture: account.picture,
       created_at: account.created_at,
       updated_at: account.updated_at
@@ -192,6 +201,28 @@ const deleteAccount = async (req, res, next) => {
   }
 };
 
+const verifyAccount = async (req, res, next) => {
+  try {
+    const email = req.email;
+    const updatedAt = new Date();
+    const data = {
+      verified: "verified",
+      updated_at: updatedAt
+    };
+    const result = await userModels.updateAccount(data, email);
+    standardResponse.responses(
+      res,
+      data,
+      200,
+      `Account with email: ${email} successfully verified!`
+    );
+    console.log(result);
+  } catch (error) {
+    console.log(error.message);
+    next({ status: 500, message: "Internal Server Error!" });
+  }
+};
+
 const searchUsers = async (req, res, next) => {
   try {
     const search = req.query.name;
@@ -213,9 +244,10 @@ const searchUsers = async (req, res, next) => {
 module.exports = {
   signUp,
   login,
-  listAccounts,
   profile,
   addProfilePicture,
+  listAccounts,
   deleteAccount,
+  verifyAccount,
   searchUsers
 };

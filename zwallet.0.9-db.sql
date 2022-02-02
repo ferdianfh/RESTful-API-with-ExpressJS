@@ -26,6 +26,7 @@ CREATE TABLE wallets (
     PRIMARY KEY (id),
     CONSTRAINT fk_wallet_user
         FOREIGN KEY (user_id) REFERENCES users (id)
+            ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- Membuat table transactions
@@ -42,4 +43,5 @@ CREATE TABLE transactions (
     PRIMARY KEY (id),
     CONSTRAINT fk_transaction_user
         FOREIGN KEY (user_id) REFERENCES users (id)
+            ON DELETE CASCADE ON UPDATE CASCADE
 );

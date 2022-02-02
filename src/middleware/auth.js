@@ -38,6 +38,32 @@ const verifyAccess = (req, res, next) => {
   }
 };
 
+const verifyEmail = (req, res, next) => {
+  const token = req.params.token;
+
+  try {
+    const privateKey = process.env.SECRET_KEY_JWT;
+    const decoded = jwt.verify(token, privateKey);
+    // console.log("hasil decoded: ", decoded);
+    req.name = decoded.name;
+    req.email = decoded.email;
+    req.role = decoded.role;
+    next();
+  } catch (error) {
+    // console.log("error dari verify: ", error.message);
+    if (error && error.name === "JsonWebTokenError") {
+      return next({ status: 400, message: "Invalid Token!" });
+    } else if (error && error.name === "TokenExpiredError") {
+      return next({
+        status: 400,
+        message: "Token Expired! Please login again."
+      });
+    } else {
+      return next({ status: 400, message: "Token Inactive!" });
+    }
+  }
+};
+
 const isAdmin = (req, res, next) => {
   const role = req.role;
   if (role !== "admin") {
@@ -46,4 +72,4 @@ const isAdmin = (req, res, next) => {
   next();
 };
 
-module.exports = { verifyAccess, isAdmin };
+module.exports = { verifyAccess, verifyEmail, isAdmin };

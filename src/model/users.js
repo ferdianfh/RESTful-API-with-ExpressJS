@@ -31,7 +31,7 @@ const createNewAccount = (account) => {
 const listAccounts = ({ sort, order, limit, offset }) => {
   return new Promise((resolve, reject) => {
     connection.query(
-      `SELECT users.id, users.name, users.email, users.picture, users.role, users.verified, users.created_at, users.updated_at FROM users ORDER BY ?? ${order} LIMIT ? OFFSET ?`,
+      `SELECT users.id, users.first_name, users.last_name, users.email, users.picture, users.role, users.verified, users.created_at, users.updated_at FROM users ORDER BY ?? ${order} LIMIT ? OFFSET ?`,
       [sort, limit, offset],
       (error, result) => {
         if (!error) {

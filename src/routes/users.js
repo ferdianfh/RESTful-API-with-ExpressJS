@@ -1,6 +1,6 @@
 const express = require("express");
 const userControllers = require("../controller/users");
-const { verifyAccess, isAdmin } = require("../middleware/auth");
+const { verifyAccess, isAdmin, verifyEmail } = require("../middleware/auth");
 const upload = require("../middleware/upload");
 
 const router = express.Router();
@@ -16,6 +16,7 @@ router
     upload.single("picture"),
     userControllers.addProfilePicture
   )
-  .delete("/profile/:id", verifyAccess, isAdmin, userControllers.deleteAccount);
+  .delete("/profile/:id", verifyAccess, isAdmin, userControllers.deleteAccount)
+  .get("/verification/:token", verifyEmail, userControllers.verifyAccount);
 
 module.exports = router;

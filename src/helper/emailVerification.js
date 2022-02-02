@@ -1,6 +1,6 @@
 const nodemailer = require("nodemailer");
 
-const sendEmail = async (toEmail) => {
+const sendEmail = async (toEmail, token) => {
   const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 465,
@@ -57,7 +57,7 @@ const sendEmail = async (toEmail) => {
             Now Please verify your account here:
           </p>
     
-          <a class="email-link" href="https://zwallet-web-app.netlify.app/"
+          <a class="email-link" href=http://localhost:3300/users/verification/${token}
             >Verify Account</a
           >
         </div>
