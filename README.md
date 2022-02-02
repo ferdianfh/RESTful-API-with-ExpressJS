@@ -341,7 +341,7 @@ Response :
 
 Here is ERD for Zwallet:
 
-![Zwallet ERD](./img/Zwallet-ERD-revisi-3.png)
+![Zwallet ERD](./img/ERD-Zwallet-Web-App.png)
 
 ## Flowchart
 
