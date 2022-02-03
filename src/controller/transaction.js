@@ -118,7 +118,7 @@ const transfer = async (req, res, next) => {
 
     const [receiver] = await transactionModel.searchReceiver(receiverPhone);
     const receiverWalletId = receiver.wallet_id;
-    const balanceReceiver = receiver.balance;
+    const receiverBalance = receiver.balance;
     const receiverEmail = receiver.email;
 
     // console.log(wallet);
@@ -126,8 +126,8 @@ const transfer = async (req, res, next) => {
     // console.log(receiver);
 
     const senderBalanceAfterTransfer = parseInt(senderBalance - amountTransfer);
-    const balanceReceiverAfterTransfer = parseInt(
-      balanceReceiver + amountTransfer
+    const receiverBalanceAfterTransfer = parseInt(
+      receiverBalance + amountTransfer
     );
 
     const dataTransfer = {
@@ -144,7 +144,7 @@ const transfer = async (req, res, next) => {
       updated_at: transferDate
     };
     const dataWalletReceiver = {
-      balance: balanceReceiverAfterTransfer,
+      balance: receiverBalanceAfterTransfer,
       updated_at: transferDate
     };
     const transfer = await transactionModel.transfer(dataTransfer);
