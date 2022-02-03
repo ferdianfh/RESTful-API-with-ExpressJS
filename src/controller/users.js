@@ -6,6 +6,9 @@ const walletModels = require("../model/wallet");
 const standardResponse = require("../helper/responseHandle");
 const verification = require("../helper/emailVerification");
 
+// redis
+const client = require("../config/redis");
+
 const signUp = async (req, res, next) => {
   try {
     const { firstName, lastName, email, password, PIN } = req.body;
@@ -136,8 +139,9 @@ const profile = async (req, res, next) => {
   try {
     const email = req.email;
     const [account] = await userModels.detailsAccount(email);
+    const userId = account.id;
     const profileData = {
-      id: account.id,
+      id: userId,
       first_name: account.first_name,
       last_name: account.last_name,
       email: account.email,
@@ -147,6 +151,14 @@ const profile = async (req, res, next) => {
       created_at: account.created_at,
       updated_at: account.updated_at
     };
+
+    // add redis
+    await client.setEx(
+      `profile/${userId}`,
+      60 * 60,
+      JSON.stringify(profileData)
+    );
+
     standardResponse.responses(
       res,
       profileData,
