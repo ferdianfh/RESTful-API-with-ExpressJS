@@ -16,22 +16,6 @@ const createTransaction = (data) => {
   });
 };
 
-const listTransaction = ({ sort, order, limit, offset }) => {
-  return new Promise((resolve, reject) => {
-    connection.query(
-      `SELECT users.id, users.phone, wallets.balance, transactions.id, transactions.phone_receiver, transactions.amount_transfer, transactions.date FROM transactions INNER JOIN users ON transactions.user_id = users.id INNER JOIN wallets ON wallet.user_id = users.id ORDER BY ?? ${order} LIMIT ? OFFSET ?`,
-      [sort, limit, offset],
-      (error, result) => {
-        if (!error) {
-          resolve(result);
-        } else {
-          reject(error);
-        }
-      }
-    );
-  });
-};
-
 const updateTransaction = (data, id) => {
   return new Promise((resolve, reject) => {
     connection.query(
@@ -111,12 +95,65 @@ const calculateTransaction = () => {
   });
 };
 
+// API baru mulai dari sini //
+
+const searchReceiver = (receiverPhone) => {
+  return new Promise((resolve, reject) => {
+    connection.query(
+      "SELECT users.id, users.email, users.phone, wallets.id as wallet_id, wallets.balance FROM users INNER JOIN wallets ON users.id = wallets.user_id WHERE users.phone = ?",
+      [receiverPhone],
+      (error, result) => {
+        if (!error) {
+          resolve(result);
+        } else {
+          reject(error);
+        }
+      }
+    );
+  });
+};
+
+const transfer = (data) => {
+  return new Promise((resolve, reject) => {
+    connection.query(
+      "INSERT INTO transactions SET ?",
+      data,
+      (error, result) => {
+        if (!error) {
+          resolve(result);
+        } else {
+          reject(error);
+        }
+      }
+    );
+  });
+};
+
+const listTransaction = ({ sort, order, limit, offset }) => {
+  return new Promise((resolve, reject) => {
+    connection.query(
+      `SELECT users.id, users.email, users.phone, wallets.balance, transactions.id, transactions.receiver_phone, transactions.amount_transfer, transactions.date FROM transactions INNER JOIN users ON transactions.user_id = users.id INNER JOIN wallets ON wallets.user_id = users.id ORDER BY ?? ${order} LIMIT ? OFFSET ?`,
+      [sort, limit, offset],
+      (error, result) => {
+        if (!error) {
+          resolve(result);
+        } else {
+          reject(error);
+        }
+      }
+    );
+  });
+};
+
 module.exports = {
   createTransaction,
-  listTransaction,
   updateTransaction,
   deleteTransaction,
   detailsTransaction,
   sortTransaction,
-  calculateTransaction
+  calculateTransaction,
+
+  searchReceiver,
+  listTransaction,
+  transfer
 };

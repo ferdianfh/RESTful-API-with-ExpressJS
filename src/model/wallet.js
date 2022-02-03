@@ -28,22 +28,6 @@ const listWallets = ({ sort, order, limit, offset }) => {
   });
 };
 
-const updateWallet = (data, id) => {
-  return new Promise((resolve, reject) => {
-    connection.query(
-      "UPDATE wallets SET ? WHERE id = ?",
-      [data, id],
-      (error, result) => {
-        if (!error) {
-          resolve(result);
-        } else {
-          reject(error);
-        }
-      }
-    );
-  });
-};
-
 const deleteWallet = (id) => {
   return new Promise((resolve, reject) => {
     connection.query("DELETE FROM wallet WHERE id = ?", id, (error, result) => {
@@ -119,13 +103,30 @@ const topUp = (data, userId) => {
   });
 };
 
+const updateWallet = (data, id) => {
+  return new Promise((resolve, reject) => {
+    connection.query(
+      "UPDATE wallets SET ? WHERE id = ?",
+      [data, id],
+      (error, result) => {
+        if (!error) {
+          resolve(result);
+        } else {
+          reject(error);
+        }
+      }
+    );
+  });
+};
+
 module.exports = {
   createWallet,
   listWallets,
-  updateWallet,
   deleteWallet,
   detailsWallet,
   calculateWallet,
+
   searchWallet,
-  topUp
+  topUp,
+  updateWallet
 };
