@@ -87,7 +87,7 @@ const login = async (req, res, next) => {
     }
     const privateKey = process.env.SECRET_KEY_JWT;
     const payload = loginData;
-    const verifyOption = { expiresIn: "2 hours" };
+    const verifyOption = { expiresIn: "2 days" };
     const token = jwt.sign(payload, privateKey, verifyOption);
     loginData.token = token;
     standardResponse.responses(
@@ -206,13 +206,14 @@ const addPhoneNumber = async (req, res, next) => {
       phone: dataProfile.phone,
       updated_at: updatedAt
     };
+    // eslint-disable-next-line no-unused-vars
     const result = await userModels.updateAccount(data, email);
-    console.log(result);
+    // console.log(result);
     standardResponse.responses(
       res,
       data,
       200,
-      `Profile phone with email: ${email} successfully updated!`
+      `Profile phone: ${dataProfile.phone} successfully updated!`
     );
   } catch (error) {
     console.log(error.message);
@@ -246,12 +247,15 @@ const verifyAccount = async (req, res, next) => {
       updated_at: updatedAt
     };
     const result = await userModels.updateAccount(data, email);
-    standardResponse.responses(
-      res,
-      data,
-      200,
-      `Account with email: ${email} successfully verified!`
+    res.redirect(
+      "https://zwallet-web-app.netlify.app/auth/login?status=success"
     );
+    // standardResponse.responses(
+    //   res,
+    //   data,
+    //   200,
+    //   `Account with email: ${email} successfully verified!`
+    // );
     console.log(result);
   } catch (error) {
     console.log(error.message);

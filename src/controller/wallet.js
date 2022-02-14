@@ -75,8 +75,9 @@ const topUp = async (req, res, next) => {
     updated_at: new Date()
   };
   try {
+    // eslint-disable-next-line no-unused-vars
     const result = await walletModel.topUp(data, userId);
-    console.log(result);
+    // console.log(result);
     standardResponse.responses(res, data, 200, `Top Up ${topup} success!`);
   } catch (error) {
     console.log(error.message);
@@ -99,12 +100,18 @@ const listWallets = async (req, res, next) => {
     });
     const calcResult = await walletModel.calculateWallet();
     const { total } = calcResult[0];
-    standardResponse.responses(res, result, 200, "Data requests success!", {
-      currentPage: page,
-      limit: limit,
-      totalWallet: total,
-      totalPage: Math.ceil(total / limit)
-    });
+    standardResponse.responses(
+      res,
+      result,
+      200,
+      `Data requests success! Total Wallets: ${total}`,
+      {
+        currentPage: page,
+        limit: limit,
+        totalWallet: total,
+        totalPage: Math.ceil(total / limit)
+      }
+    );
   } catch (error) {
     console.log(error.message);
     next({ status: 500, message: "Internal Server Error!" });

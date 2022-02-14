@@ -1,6 +1,12 @@
 const helperMessage = (req, res, next) => {
-  res.status("404");
-  res.json({ message: "URL Not Found" });
+  const statusCode = 404;
+  res.status(statusCode);
+  res.json({
+    status: "Success",
+    code: statusCode,
+    data: null,
+    message: "URL Not Found"
+  });
 };
 
 module.exports = { helperMessage };
