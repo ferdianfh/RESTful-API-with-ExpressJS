@@ -121,6 +121,9 @@ const transfer = async (req, res, next) => {
     const receiverBalance = receiver.balance;
     const receiverEmail = receiver.email;
 
+    if (email === receiverEmail) {
+      return next({ status: 406, message: "Not Acceptable!" });
+    }
     // console.log(wallet);
     // console.log(receiverPhone);
     // console.log(receiver);
@@ -173,6 +176,43 @@ const transfer = async (req, res, next) => {
   }
 };
 
+const history = async (req, res, next) => {
+  try {
+    const userId = req.id;
+    const sort = req.query.sort || "receiver_phone";
+    const order = req.query.order || "desc";
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 4;
+    const offset = (page - 1) * limit;
+    const result = await transactionModel.history({
+      userId,
+      sort,
+      order,
+      limit,
+      offset
+    });
+    const calcResult = await transactionModel.calculateTransactionByUserId(
+      userId
+    );
+    const { total } = calcResult[0];
+    standardResponse.responses(
+      res,
+      result,
+      200,
+      `Data requests success! Total transactions from user with id: ${userId} are ${total}`,
+      {
+        currentPage: page,
+        limit: limit,
+        totalTransaction: total,
+        totalPage: Math.ceil(total / limit)
+      }
+    );
+  } catch (error) {
+    console.log(error.message);
+    next({ status: 500, message: "Internal Server Error!" });
+  }
+};
+
 const listTransaction = async (req, res, next) => {
   try {
     const sort = req.query.sort || "receiver_phone";
@@ -208,5 +248,6 @@ module.exports = {
   sortTransaction,
 
   transfer,
+  history,
   listTransaction
 };

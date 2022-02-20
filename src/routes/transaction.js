@@ -7,6 +7,7 @@ const router = express.Router();
 
 router
   .get("/", verifyAccess, isAdmin, transactionController.listTransaction)
+  .get("/history", verifyAccess, transactionController.history)
   .post(
     "/transfer",
     verifyAccess,

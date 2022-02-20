@@ -80,6 +80,8 @@ const sortTransaction = ({ sort, order }) => {
   });
 };
 
+// API baru mulai dari sini //
+
 const calculateTransaction = () => {
   return new Promise((resolve, reject) => {
     connection.query(
@@ -95,7 +97,21 @@ const calculateTransaction = () => {
   });
 };
 
-// API baru mulai dari sini //
+const calculateTransactionByUserId = (userId) => {
+  return new Promise((resolve, reject) => {
+    connection.query(
+      "SELECT COUNT(*) AS total FROM transactions WHERE user_id = ?",
+      userId,
+      (error, result) => {
+        if (!error) {
+          resolve(result);
+        } else {
+          reject(error);
+        }
+      }
+    );
+  });
+};
 
 const searchReceiver = (receiverPhone) => {
   return new Promise((resolve, reject) => {
@@ -129,10 +145,26 @@ const transfer = (data) => {
   });
 };
 
+const history = ({ userId, sort, order, limit, offset }) => {
+  return new Promise((resolve, reject) => {
+    connection.query(
+      `SELECT transactions.id, users.email, users.picture, transactions.user_id, transactions.receiver_name, transactions.receiver_phone, transactions.amount_transfer, transactions.notes, transactions.date FROM transactions INNER JOIN users ON transactions.user_id = users.id WHERE transactions.user_id = ? ORDER BY ?? ${order} LIMIT ? OFFSET ?`,
+      [userId, sort, limit, offset],
+      (error, result) => {
+        if (!error) {
+          resolve(result);
+        } else {
+          reject(error);
+        }
+      }
+    );
+  });
+};
+
 const listTransaction = ({ sort, order, limit, offset }) => {
   return new Promise((resolve, reject) => {
     connection.query(
-      `SELECT users.id, users.email, users.phone, wallets.balance, transactions.id, transactions.receiver_phone, transactions.amount_transfer, transactions.date FROM transactions INNER JOIN users ON transactions.user_id = users.id INNER JOIN wallets ON wallets.user_id = users.id ORDER BY ?? ${order} LIMIT ? OFFSET ?`,
+      `SELECT transactions.id, users.email, users.phone, transactions.user_id, transactions.receiver_name, transactions.receiver_phone, transactions.amount_transfer, transactions.status, transactions.date FROM transactions INNER JOIN users ON transactions.user_id = users.id INNER JOIN wallets ON wallets.user_id = users.id ORDER BY ?? ${order} LIMIT ? OFFSET ?`,
       [sort, limit, offset],
       (error, result) => {
         if (!error) {
@@ -151,9 +183,11 @@ module.exports = {
   deleteTransaction,
   detailsTransaction,
   sortTransaction,
-  calculateTransaction,
 
+  calculateTransaction,
+  calculateTransactionByUserId,
   searchReceiver,
   listTransaction,
-  transfer
+  transfer,
+  history
 };
