@@ -88,6 +88,22 @@ const updateAccount = (data, email) => {
   });
 };
 
+const updateAccountById = (data, id) => {
+  return new Promise((resolve, reject) => {
+    connection.query(
+      "UPDATE users SET ? WHERE id = ?",
+      [data, id],
+      (error, result) => {
+        if (!error) {
+          resolve(result);
+        } else {
+          reject(error);
+        }
+      }
+    );
+  });
+};
+
 const deleteAccount = (id) => {
   return new Promise((resolve, reject) => {
     connection.query("DELETE FROM users WHERE id = ?", id, (error, result) => {
@@ -123,6 +139,7 @@ module.exports = {
   calculateAccount,
   detailsAccount,
   updateAccount,
+  updateAccountById,
   deleteAccount,
   searchUsers
 };

@@ -74,7 +74,6 @@ const login = async (req, res, next) => {
     }
     const loginData = {
       id: account.id,
-      name: account.name,
       email: account.email,
       role: account.role
     };
@@ -95,6 +94,36 @@ const login = async (req, res, next) => {
       loginData,
       200,
       `Account with email: ${account.email} successfully login!`
+    );
+  } catch (error) {
+    console.log(error.message);
+    next({ status: 500, message: "Internal Server Error!" });
+  }
+};
+
+const createPin = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const { PIN } = req.body;
+    const convertedPIN = PIN.toString();
+    const updatedAt = new Date();
+    const saltRounds = 10;
+    const hashedPIN = await bcrypt.hash(convertedPIN, saltRounds);
+    const data = {
+      PIN: hashedPIN,
+      updated_at: updatedAt
+    };
+    const dataCreatePIN = {
+      id: id,
+      updated_at: updatedAt
+    };
+    // eslint-disable-next-line no-unused-vars
+    const result = await userModels.updateAccountById(data, id);
+    standardResponse.responses(
+      res,
+      dataCreatePIN,
+      200,
+      "PIN successfully created!"
     );
   } catch (error) {
     console.log(error.message);
@@ -221,6 +250,89 @@ const addPhoneNumber = async (req, res, next) => {
   }
 };
 
+const deletePhoneNumber = async (req, res, next) => {
+  try {
+    const email = req.email;
+    const updatedAt = new Date();
+    const data = {
+      phone: null,
+      updated_at: updatedAt
+    };
+    // eslint-disable-next-line no-unused-vars
+    const result = await userModels.updateAccount(data, email);
+    standardResponse.responses(
+      res,
+      data,
+      200,
+      `Phone number with email: ${email} has been deleted!`
+    );
+  } catch (error) {
+    console.log(error.message);
+    next({ status: 500, message: "Internal Server Error!" });
+  }
+};
+
+const changePassword = async (req, res, next) => {
+  try {
+    const email = req.email;
+    const { currentPassword, newPassword, repeatNewPassword } = req.body;
+    const [account] = await userModels.searchAccount(email);
+    if (!account) {
+      return next({
+        status: 401,
+        message: "Your account is not registered!"
+      });
+    }
+    const checkPassword = await bcrypt.compare(
+      currentPassword,
+      account.password
+    );
+    if (!checkPassword) {
+      return next({
+        status: 401,
+        message: "Please check again your current password!"
+      });
+    }
+    if (
+      currentPassword === newPassword ||
+      currentPassword === repeatNewPassword
+    ) {
+      return next({
+        status: 400,
+        message:
+          "Your new password can not be the same as your current password!"
+      });
+    } else if (newPassword !== repeatNewPassword) {
+      return next({
+        status: 400,
+        message: "Password isn't match! Please check your new password!"
+      });
+    }
+    const updatedAt = new Date();
+    const saltRounds = 10;
+    const hashPassword = await bcrypt.hash(newPassword, saltRounds);
+    const data = {
+      password: hashPassword,
+      updated_at: updatedAt
+    };
+    const dataChangePassword = {
+      email: email,
+      updated_at: data.updated_at
+    };
+    // eslint-disable-next-line no-unused-vars
+    const result = await userModels.updateAccount(data, email);
+    standardResponse.responses(
+      res,
+      dataChangePassword,
+      200,
+      `Password with email: ${email} successfully updated!`
+    );
+  } catch (error) {
+    console.log(error.message);
+    next({ status: 500, message: "Internal Server Error!" });
+  }
+};
+
 const deleteAccount = async (req, res, next) => {
   try {
     const userId = req.params.id;
@@ -248,14 +360,8 @@ const verifyAccount = async (req, res, next) => {
     };
     const result = await userModels.updateAccount(data, email);
     res.redirect(
-      "https://zwallet-web-app.netlify.app/auth/login?status=success"
+      "https://zwallet-web-app.netlify.app/auth/login?account=verified&status=success"
     );
-    // standardResponse.responses(
-    //   res,
-    //   data,
-    //   200,
-    //   `Account with email: ${email} successfully verified!`
-    // );
     console.log(result);
   } catch (error) {
     console.log(error.message);
@@ -283,12 +389,17 @@ const searchUsers = async (req, res, next) => {
 
 module.exports = {
   signUp,
+  verifyAccount,
+  createPin,
   login,
+
   profile,
   addProfilePicture,
   addPhoneNumber,
+  deletePhoneNumber,
+  changePassword,
+
   listAccounts,
   deleteAccount,
-  verifyAccount,
   searchUsers
 };
