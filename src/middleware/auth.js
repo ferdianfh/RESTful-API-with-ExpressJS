@@ -20,7 +20,6 @@ const verifyAccess = (req, res, next) => {
     const decoded = jwt.verify(token, privateKey);
     // console.log("hasil decoded: ", decoded);
     req.id = decoded.id;
-    // req.name = decoded.name;
     req.email = decoded.email;
     req.role = decoded.role;
     next();

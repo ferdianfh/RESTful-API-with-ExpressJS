@@ -45,3 +45,8 @@ CREATE TABLE transactions (
         FOREIGN KEY (user_id) REFERENCES users (id)
             ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+
+-- Riwayat modifikasi table/database zwallet
+ALTER TABLE users
+MODIFY PIN VARCHAR(64) NULL AFTER password;
