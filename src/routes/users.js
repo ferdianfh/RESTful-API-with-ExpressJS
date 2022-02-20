@@ -37,6 +37,8 @@ router
   )
   .put("/profile/change-password", verifyAccess, userControllers.changePassword)
   .put("/PIN/:id", userControllers.createPin)
-  .delete("/profile/:id", verifyAccess, isAdmin, userControllers.deleteAccount);
+  .delete("/profile/:id", verifyAccess, isAdmin, userControllers.deleteAccount)
+  .get("/details/:id", verifyAccess, userControllers.detailsAccount)
+  .get("/search", verifyAccess, userControllers.searchUsers);
 
 module.exports = router;

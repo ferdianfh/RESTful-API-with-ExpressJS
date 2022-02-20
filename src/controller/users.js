@@ -372,8 +372,8 @@ const verifyAccount = async (req, res, next) => {
 const searchUsers = async (req, res, next) => {
   try {
     const search = req.query.name;
-    const sort = req.query.sort;
-    const order = req.query.order;
+    const sort = req.query.sort || "created_at";
+    const order = req.query.order || "asc";
 
     const result = await userModels.searchUsers({
       search: search,
@@ -381,6 +381,22 @@ const searchUsers = async (req, res, next) => {
       order: order
     });
     standardResponse.responses(res, result, 200, "Data requests success!");
+  } catch (error) {
+    console.log(error.message);
+    next({ status: 500, message: "Internal Server Error!" });
+  }
+};
+
+const detailsAccount = async (req, res, next) => {
+  try {
+    const userId = req.params.id;
+    const [result] = await userModels.searchAccountById(userId);
+    standardResponse.responses(
+      res,
+      result,
+      200,
+      `Data Request Success! Details account with id: ${userId}`
+    );
   } catch (error) {
     console.log(error.message);
     next({ status: 500, message: "Internal Server Error!" });
@@ -401,5 +417,6 @@ module.exports = {
 
   listAccounts,
   deleteAccount,
-  searchUsers
+  searchUsers,
+  detailsAccount
 };

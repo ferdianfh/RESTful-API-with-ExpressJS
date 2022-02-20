@@ -132,6 +132,22 @@ const searchUsers = ({ search, sort, order }) => {
   });
 };
 
+const searchAccountById = (userId) => {
+  return new Promise((resolve, reject) => {
+    connection.query(
+      "SELECT id, first_name, last_name, email, phone, picture, role, created_at FROM users WHERE id = ?",
+      userId,
+      (error, result) => {
+        if (!error) {
+          resolve(result);
+        } else {
+          reject(error);
+        }
+      }
+    );
+  });
+};
+
 module.exports = {
   searchAccount,
   createNewAccount,
@@ -141,5 +157,7 @@ module.exports = {
   updateAccount,
   updateAccountById,
   deleteAccount,
-  searchUsers
+
+  searchUsers,
+  searchAccountById
 };
