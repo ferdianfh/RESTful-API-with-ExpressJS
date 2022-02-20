@@ -13,7 +13,7 @@ const sendEmail = async (toEmail, token) => {
 
   const info = await transporter.sendMail({
     // eslint-disable-next-line quotes
-    from: '"Wanda from Zwallet" <wandaaaa.max@gmail.com>', // sender address
+    from: `"Wanda from Zwallet" <${process.env.EMAIL_USER}>`, // sender address
     to: toEmail, // list of receivers
     subject: "Hello! Welcome to Zwallet.", // Subject line
     // text: "Hello world?", // plain text body

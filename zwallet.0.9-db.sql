@@ -5,7 +5,7 @@ CREATE TABLE users (
     last_name VARCHAR(64) NOT NULL,
     email VARCHAR(64) NOT NULL,
     password VARCHAR(64) NOT NULL,
-    PIN INT(6) NOT NULL,
+    PIN VARCHAR(64),
     phone VARCHAR(32),
     picture VARCHAR(128),
     role VARCHAR(32) NOT NULL DEFAULT "user",

@@ -1,6 +1,12 @@
 const responses = (res, result, status, message, pagination) => {
   const statusMessage = () => {
-    if (status === 200) {
+    if (
+      status === 200 ||
+      status === 201 ||
+      status === 202 ||
+      status === 203 ||
+      status === 204
+    ) {
       return "Success";
     } else {
       return "Failed";
