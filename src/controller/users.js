@@ -53,7 +53,7 @@ const signUp = async (req, res, next) => {
     standardResponse.responses(
       res,
       signUpData,
-      201,
+      200,
       `Registration Success! New account with email: ${account.email} has been created.`
     );
   } catch (error) {
