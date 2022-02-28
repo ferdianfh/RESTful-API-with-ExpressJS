@@ -1,7 +1,7 @@
 // redis
-const redis = require("redis");
-const client = redis.createClient(6379);
+// const redis = require("redis");
+// const client = redis.createClient(6379);
 
-client.connect();
+// client.connect();
 
-module.exports = client;
+// module.exports = client;

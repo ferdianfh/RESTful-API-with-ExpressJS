@@ -59,7 +59,7 @@ const calculateAccount = () => {
 const detailsAccount = (email) => {
   return new Promise((resolve, reject) => {
     connection.query(
-      "SELECT users.id, users.first_name, users.last_name, users.email, users.phone, users.picture, users.role, users.verified, wallets.balance, users.created_at, users.updated_at FROM users INNER JOIN wallets ON wallets.user_id = users.id WHERE email = ?",
+      "SELECT users.id, users.first_name, users.last_name, users.email, users.phone, users.PIN, users.picture, users.role, users.verified, wallets.balance, wallets.income, wallets.expense, users.created_at, users.updated_at FROM users INNER JOIN wallets ON wallets.user_id = users.id WHERE email = ?",
       email,
       (error, result) => {
         if (!error) {
@@ -116,11 +116,11 @@ const deleteAccount = (id) => {
   });
 };
 
-const searchUsers = ({ search, sort, order }) => {
+const searchUsers = ({ search, sort, order, limit, offset }) => {
   return new Promise((resolve, reject) => {
     connection.query(
-      `SELECT id, first_name, last_name, email, phone, created_at, updated_at FROM users WHERE first_name LIKE '%${search}%' ORDER BY ?? ${order}`,
-      sort,
+      `SELECT id, first_name, last_name, email, phone, picture, role, verified, created_at, updated_at FROM users WHERE first_name LIKE '%${search}%' ORDER BY ?? ${order} LIMIT ? OFFSET ?`,
+      [sort, limit, offset],
       (error, result) => {
         if (!error) {
           resolve(result);

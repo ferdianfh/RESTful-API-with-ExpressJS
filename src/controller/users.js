@@ -7,11 +7,11 @@ const standardResponse = require("../helper/responseHandle");
 const verification = require("../helper/emailVerification");
 
 // redis
-const client = require("../config/redis");
+// const client = require("../config/redis");
 
 const signUp = async (req, res, next) => {
   try {
-    const { firstName, lastName, email, password, PIN } = req.body;
+    const { firstName, lastName, email, password } = req.body;
     const userId = uuidv4();
     const user = await userModels.searchAccount(email);
     if (user.length > 0) {
@@ -24,12 +24,11 @@ const signUp = async (req, res, next) => {
       first_name: firstName,
       last_name: lastName,
       email,
-      password: hashPassword,
-      PIN
+      password: hashPassword
     };
     const signUpData = {
       id: account.id,
-      name: account.name,
+      name: `${account.first_name} ${account.last_name}`,
       email: account.email
     };
     const wallet = {
@@ -101,12 +100,18 @@ const login = async (req, res, next) => {
   }
 };
 
-const createPin = async (req, res, next) => {
+const createPinById = async (req, res, next) => {
   try {
     const id = req.params.id;
     const { PIN } = req.body;
     const convertedPIN = PIN.toString();
     const updatedAt = new Date();
+    if (convertedPIN.length < 6) {
+      return next({
+        status: 403,
+        message: "Please input 6 Digits number to create PIN!"
+      });
+    }
     const saltRounds = 10;
     const hashedPIN = await bcrypt.hash(convertedPIN, saltRounds);
     const data = {
@@ -168,29 +173,29 @@ const profile = async (req, res, next) => {
   try {
     const email = req.email;
     const [account] = await userModels.detailsAccount(email);
-    const userId = account.id;
-    const profileData = {
-      id: userId,
-      first_name: account.first_name,
-      last_name: account.last_name,
-      email: account.email,
-      phone: account.phone,
-      picture: account.picture,
-      balance: account.balance,
-      created_at: account.created_at,
-      updated_at: account.updated_at
-    };
+    // const userId = account.id;
+    // const profileData = {
+    //   id: userId,
+    //   first_name: account.first_name,
+    //   last_name: account.last_name,
+    //   email: account.email,
+    //   phone: account.phone,
+    //   picture: account.picture,
+    //   balance: account.balance,
+    //   created_at: account.created_at,
+    //   updated_at: account.updated_at
+    // };
 
     // add redis
-    await client.setEx(
-      `profile/${userId}`,
-      60 * 60,
-      JSON.stringify(profileData)
-    );
+    // await client.setEx(
+    //   `profile/${userId}`,
+    //   60 * 60,
+    //   JSON.stringify(profileData)
+    // );
 
     standardResponse.responses(
       res,
-      profileData,
+      account,
       200,
       `Profile with email: ${email} successfully requested!`
     );
@@ -333,6 +338,72 @@ const changePassword = async (req, res, next) => {
   }
 };
 
+const createPIN = async (req, res, next) => {
+  try {
+    const email = req.email;
+    const { PIN } = req.body;
+    const convertedPIN = PIN.toString();
+    const updatedAt = new Date();
+    if (convertedPIN === "") {
+      return next({ status: 403, message: "Please input your PIN!" });
+    } else if (convertedPIN.length < 6) {
+      return next({
+        status: 403,
+        message: "Please input 6 Digits number to create PIN!"
+      });
+    }
+    const saltRounds = 10;
+    const hashedPIN = await bcrypt.hash(convertedPIN, saltRounds);
+    const data = {
+      PIN: hashedPIN,
+      updated_at: updatedAt
+    };
+    const dataCreatePIN = {
+      email,
+      updated_at: updatedAt
+    };
+    // eslint-disable-next-line no-unused-vars
+    const result = await userModels.updateAccount(data, email);
+    standardResponse.responses(
+      res,
+      dataCreatePIN,
+      200,
+      `Account with email: ${email} successfully created PIN!`
+    );
+  } catch (error) {
+    console.log(error.message);
+    next({ status: 500, message: "Internal Server Error!" });
+  }
+};
+
+const confirmationPIN = async (req, res, next) => {
+  try {
+    const email = req.email;
+    const { PIN } = req.body;
+    const convertedPIN = PIN.toString();
+    if (convertedPIN === "") {
+      return next({ status: 403, message: "Please input your PIN!" });
+    }
+    const [account] = await userModels.searchAccount(email);
+    if (!account) {
+      return next({ status: 403, message: "Your account is not registered!" });
+    } else if (!account.PIN) {
+      return next({
+        status: 403,
+        message: "You hasn't created a PIN. Please create PIN now!"
+      });
+    }
+    const checkedPIN = await bcrypt.compare(convertedPIN, account.PIN);
+    if (!checkedPIN) {
+      return next({ status: 403, message: "You input the wrong current PIN!" });
+    }
+    standardResponse.responses(res, null, 200, "Your PIN is match!");
+  } catch (error) {
+    console.log(error.message);
+    next({ status: 500, message: "Internal Server Error!" });
+  }
+};
+
 const deleteAccount = async (req, res, next) => {
   try {
     const userId = req.params.id;
@@ -374,13 +445,25 @@ const searchUsers = async (req, res, next) => {
     const search = req.query.name;
     const sort = req.query.sort || "created_at";
     const order = req.query.order || "asc";
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 4;
+    const offset = (page - 1) * limit;
 
     const result = await userModels.searchUsers({
       search: search,
       sort: sort,
-      order: order
+      order: order,
+      limit,
+      offset
     });
-    standardResponse.responses(res, result, 200, "Data requests success!");
+    const calcResult = await userModels.calculateAccount();
+    const { total } = calcResult[0];
+    standardResponse.responses(res, result, 200, "Data requests success!", {
+      currentPage: page,
+      limit: limit,
+      totalAccount: total,
+      totalPage: Math.ceil(total / limit)
+    });
   } catch (error) {
     console.log(error.message);
     next({ status: 500, message: "Internal Server Error!" });
@@ -406,7 +489,7 @@ const detailsAccount = async (req, res, next) => {
 module.exports = {
   signUp,
   verifyAccount,
-  createPin,
+  createPinById,
   login,
 
   profile,
@@ -414,6 +497,8 @@ module.exports = {
   addPhoneNumber,
   deletePhoneNumber,
   changePassword,
+  createPIN,
+  confirmationPIN,
 
   listAccounts,
   deleteAccount,

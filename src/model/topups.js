@@ -1,8 +1,8 @@
 const connection = require("../config/database");
 
-const createWallet = (wallet) => {
+const topUp = (data) => {
   return new Promise((resolve, reject) => {
-    connection.query("INSERT INTO wallets SET ?", wallet, (error, result) => {
+    connection.query("INSERT INTO topups SET ?", data, (error, result) => {
       if (!error) {
         resolve(result);
       } else {
@@ -12,38 +12,10 @@ const createWallet = (wallet) => {
   });
 };
 
-const listWallets = ({ sort, order, limit, offset }) => {
+const getTopUpRecord = (id) => {
   return new Promise((resolve, reject) => {
     connection.query(
-      `SELECT * FROM wallets ORDER BY ?? ${order} LIMIT ? OFFSET ?`,
-      [sort, limit, offset],
-      (error, result) => {
-        if (!error) {
-          resolve(result);
-        } else {
-          reject(error);
-        }
-      }
-    );
-  });
-};
-
-const deleteWallet = (id) => {
-  return new Promise((resolve, reject) => {
-    connection.query("DELETE FROM wallet WHERE id = ?", id, (error, result) => {
-      if (!error) {
-        resolve(result);
-      } else {
-        reject(error);
-      }
-    });
-  });
-};
-
-const detailsWallet = (id) => {
-  return new Promise((resolve, reject) => {
-    connection.query(
-      "SELECT * FROM wallets WHERE id = ?",
+      "SELECT * FROM topups WHERE id = ?",
       id,
       (error, result) => {
         if (!error) {
@@ -56,59 +28,10 @@ const detailsWallet = (id) => {
   });
 };
 
-const calculateWallet = () => {
+const updateTopUpRecord = (data, id) => {
   return new Promise((resolve, reject) => {
     connection.query(
-      "SELECT COUNT(*) AS total FROM wallets",
-      (error, result) => {
-        if (!error) {
-          resolve(result);
-        } else {
-          reject(error);
-        }
-      }
-    );
-  });
-};
-
-// API baru dari sini
-
-const searchWallet = (email) => {
-  return new Promise((resolve, reject) => {
-    connection.query(
-      "SELECT wallets.user_id, wallets.id, users.email, users.phone, wallets.balance, wallets.income, wallets.expense, wallets.amount_topup, wallets.created_at, wallets.updated_at FROM wallets INNER JOIN users ON wallets.user_id = users.id WHERE email = ?",
-      [email],
-      (error, result) => {
-        if (!error) {
-          resolve(result);
-        } else {
-          reject(error);
-        }
-      }
-    );
-  });
-};
-
-const topUp = (data, userId) => {
-  return new Promise((resolve, reject) => {
-    connection.query(
-      "UPDATE wallets SET ? WHERE user_id = ?",
-      [data, userId],
-      (error, result) => {
-        if (!error) {
-          resolve(result);
-        } else {
-          reject(error);
-        }
-      }
-    );
-  });
-};
-
-const updateWallet = (data, id) => {
-  return new Promise((resolve, reject) => {
-    connection.query(
-      "UPDATE wallets SET ? WHERE id = ?",
+      "UPDATE topups SET ? WHERE id = ?",
       [data, id],
       (error, result) => {
         if (!error) {
@@ -121,14 +44,75 @@ const updateWallet = (data, id) => {
   });
 };
 
-module.exports = {
-  createWallet,
-  listWallets,
-  deleteWallet,
-  detailsWallet,
-  calculateWallet,
+const calculateTopUpRecords = () => {
+  return new Promise((resolve, reject) => {
+    connection.query(
+      "SELECT COUNT(*) AS total FROM topups",
+      (error, result) => {
+        if (!error) {
+          resolve(result);
+        } else {
+          reject(error);
+        }
+      }
+    );
+  });
+};
 
-  searchWallet,
+const calculateTopUpRecordsByUserId = (userId) => {
+  return new Promise((resolve, reject) => {
+    connection.query(
+      "SELECT COUNT(*) AS total FROM topups WHERE user_id = ?",
+      userId,
+      (error, result) => {
+        if (!error) {
+          resolve(result);
+        } else {
+          reject(error);
+        }
+      }
+    );
+  });
+};
+
+const topUpHistory = ({ userId, sort, order, limit, offset }) => {
+  return new Promise((resolve, reject) => {
+    connection.query(
+      `SELECT topups.id, users.id, users.first_name, users.last_name, users.email, users.phone, users.picture, topups.topup_method, topups.amount_topup, topups.date, topups.status, topups.updated_at FROM topups INNER JOIN users ON users.id = topups.user_id WHERE topups.user_id = ? ORDER BY ?? ${order} LIMIT ? OFFSET ?`,
+      [userId, sort, limit, offset],
+      (error, result) => {
+        if (!error) {
+          resolve(result);
+        } else {
+          reject(error);
+        }
+      }
+    );
+  });
+};
+
+const topUpList = ({ sort, order, limit, offset }) => {
+  return new Promise((resolve, reject) => {
+    connection.query(
+      `SELECT topups.id, users.email, users.phone, topups.user_id, topups.topup_method, topups.amount_topup, topups.status, topups.date, wallets.balance, topups.updated_at FROM topups INNER JOIN users ON topups.user_id = users.id INNER JOIN wallets ON wallets.user_id = users.id ORDER BY ?? ${order} LIMIT ? OFFSET ?`,
+      [sort, limit, offset],
+      (error, result) => {
+        if (!error) {
+          resolve(result);
+        } else {
+          reject(error);
+        }
+      }
+    );
+  });
+};
+
+module.exports = {
   topUp,
-  updateWallet
+  getTopUpRecord,
+  updateTopUpRecord,
+  calculateTopUpRecords,
+  calculateTopUpRecordsByUserId,
+  topUpHistory,
+  topUpList
 };
