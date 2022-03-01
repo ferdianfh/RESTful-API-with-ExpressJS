@@ -144,6 +144,11 @@ const transfer = async (req, res, next) => {
       return next({ status: 403, message: "Minimum Transfer Rp10,000" });
     } else if (amountTransfer > 500000) {
       return next({ status: 403, message: "Maximum Transfer Rp500,000" });
+    } else if (amountTransfer % 5000 !== 0) {
+      return next({
+        status: 403,
+        message: "Nominal Transfer available: multiples of Rp5,000 or Rp10,000"
+      });
     }
 
     const dataTransfer = {

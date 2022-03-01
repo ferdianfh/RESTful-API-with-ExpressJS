@@ -180,7 +180,7 @@ const updateTransferById = (data, id) => {
 const history = ({ userId, sort, order, limit, offset }) => {
   return new Promise((resolve, reject) => {
     connection.query(
-      `SELECT transactions.id, transactions.user_id, users.email, users.phone, wallets.balance as balance_left, transactions.receiver_name, transactions.receiver_phone, transactions.receiver_picture, transactions.amount_transfer, transactions.notes, transactions.date FROM transactions INNER JOIN users ON transactions.user_id = users.id INNER JOIN wallets ON wallets.user_id = users.id WHERE transactions.user_id = ? ORDER BY ?? ${order} LIMIT ? OFFSET ?`,
+      `SELECT transactions.id, transactions.user_id, users.email, users.phone, wallets.balance as balance_left, transactions.receiver_name, transactions.receiver_phone, transactions.receiver_picture, transactions.amount_transfer, transactions.notes, transactions.date, transactions.status FROM transactions INNER JOIN users ON transactions.user_id = users.id INNER JOIN wallets ON wallets.user_id = users.id WHERE transactions.user_id = ? ORDER BY ?? ${order} LIMIT ? OFFSET ?`,
       [userId, sort, limit, offset],
       (error, result) => {
         if (!error) {
