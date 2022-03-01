@@ -431,7 +431,7 @@ const verifyAccount = async (req, res, next) => {
     };
     const result = await userModels.updateAccount(data, email);
     res.redirect(
-      "https://zwallet-web-app.netlify.app/auth/login?account=verified&status=success"
+      "https://zwallet-web-app.netlify.app/auth/signup/success?account=verified&status=success"
     );
     console.log(result);
   } catch (error) {
